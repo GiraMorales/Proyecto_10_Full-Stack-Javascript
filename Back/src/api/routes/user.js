@@ -1,3 +1,4 @@
+const { isAuth } = require('../../middlewares/auth');
 const {
   getUsers,
   getUserById,
@@ -9,11 +10,11 @@ const {
 
 const usersRouter = require('express').Router();
 
-usersRouter.get('/', getUsers);
-usersRouter.get('/:id', getUserById);
+usersRouter.get('/', [isAuth], getUsers);
+usersRouter.get('/:id', [isAuth], getUserById);
 usersRouter.post('/register', register);
 usersRouter.post('/login', login);
-usersRouter.put('/:id', updateUser);
-usersRouter.delete('/:id', deleteUser);
+usersRouter.put('/:id', [isAuth], updateUser);
+usersRouter.delete('/:id', [isAuth], deleteUser);
 
 module.exports = usersRouter;
