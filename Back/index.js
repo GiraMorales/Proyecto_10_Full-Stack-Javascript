@@ -21,6 +21,6 @@ app.use('*', (req, res, next) => {
   return res.status(404).json('Route Not Found');
 });
 
-app.listen(3004, () => {
+app.listen(3000, () => {
   console.log('http://localhost:3000');
 });
