@@ -15,7 +15,7 @@ eventosRouter.get('/', [isAuth], getEventos);
 eventosRouter.get('/:id', [isAuth], getEventoById);
 eventosRouter.post(
   '/',
-  [isAuth, isAdmin], // Autenticación y permisos primero
+  [isAdmin], // Autenticación y permisos primero
   upload.single('imagen'), // Subida de archivo
   (req, res, next) => {
     console.log('Archivo recibido:', req.file); // Depurar el archivo recibido
@@ -23,7 +23,7 @@ eventosRouter.post(
   },
   postEvento
 );
-eventosRouter.put('/:id', [isAuth, isAdmin], updateEvento);
-eventosRouter.delete('/:id', [isAuth, isAdmin], deleteEvento);
+eventosRouter.put('/:id', [isAdmin], updateEvento);
+eventosRouter.delete('/:id', [isAdmin], deleteEvento);
 
 module.exports = eventosRouter;
