@@ -2,7 +2,7 @@ const { Evento } = require('../models/evento');
 
 const getEventos = async (req, res, next) => {
   try {
-    const eventos = await Evento.find();
+    const eventos = await Evento.find().populate('relatedUsers');
     return res.status(200).json(eventos);
   } catch (error) {
     return res.status(400).json('error al buscar los eventos');
@@ -11,15 +11,19 @@ const getEventos = async (req, res, next) => {
 const getEventoById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const evento = await Evento.findById(id);
+    const evento = await Evento.findById(id).populate('relatedUsers');
     return res.status(200).json(evento);
   } catch (error) {
+    console.log(error);
+
     return res.status(400).json('error al buscar el evento');
   }
 };
 const postEvento = async (req, res, next) => {
   try {
     const newEvento = new Evento(req.body);
+    newEvento.verified = req.user?.rol === 'admin';
+
     const evento = await newEvento.save();
     return res.status(201).json(evento);
   } catch (error) {

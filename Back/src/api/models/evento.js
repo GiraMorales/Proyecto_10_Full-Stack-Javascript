@@ -8,7 +8,7 @@ const eventoSchema = new mongoose.Schema(
     ubicacion: { type: String, required: true },
     descripcion: { type: String, required: false },
     relatedUsers: [
-      { type: mongoose.Types.ObjectId, required: false, ref: 'user' }
+      { type: mongoose.Types.ObjectId, required: false, ref: 'users' }
     ]
   },
   {
