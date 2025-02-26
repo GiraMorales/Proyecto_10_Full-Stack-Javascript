@@ -24,7 +24,9 @@ const postEvento = async (req, res, next) => {
   try {
     const newEvento = new Evento(req.body);
     newEvento.verified = req.user?.rol === 'admin';
-
+    if (req.file) {
+      newEvento.imagen = req.file.path;
+    }
     const evento = await newEvento.save();
     return res.status(201).json(evento);
   } catch (error) {
@@ -36,23 +38,39 @@ const postEvento = async (req, res, next) => {
 const updateEvento = async (req, res, next) => {
   try {
     const { id } = req.params;
-
-    const newEvento = new Evento(req.body);
-    newEvento._id = id;
-    const eventoUpdated = await Evento.findByIdAndUpdate(id, newEvento, {
-      new: true
-    });
-
-    Object.assign(newEvento, req.body);
-
-    if (req.file) {
-      // Borra la imagen anterior si existía
-      if (newEvento.imagen) {
-        deleteFile(newEvento.imagen);
-      }
-      newEvento.imagen = req.file.path;
+    const eventoExistente = await Evento.findById(id);
+    if (!eventoExistente) {
+      return res.status(404).json({ mensaje: 'Evento no encontrado' });
     }
+    if (req.file && eventoExistente.imagen) {
+      deleteFile(eventoExistente.imagen);
+    }
+    const eventoActualizado = {
+      ...req.body,
+      imagen: req.file ? req.file.path : eventoExistente.imagen
+    };
+    const eventoUpdated = await Evento.findByIdAndUpdate(
+      id,
+      eventoActualizado,
+      {
+        new: true
+      }
+    );
+    // const newEvento = new Evento(req.body);
+    // newEvento._id = id;
+    // const eventoUpdated = await Evento.findByIdAndUpdate(id, newEvento, {
+    //   new: true
+    // });
 
+    // Object.assign(newEvento, req.body);
+
+    // if (req.file) {
+    //   // Borra la imagen anterior si existía
+    //   if (newEvento.imagen) {
+    //     deleteFile(newEvento.imagen);
+    //   }
+    //   newEvento.imagen = req.file.path;
+    // }
     return res.status(200).json(eventoUpdated);
   } catch (error) {
     return res.status(400).json('error al actualizar el evento');
