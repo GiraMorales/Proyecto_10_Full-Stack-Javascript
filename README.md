@@ -20,16 +20,17 @@ Los usuarios no logueados solo ven el titulo del evento, foto y fecha del evento
 
 POST /api/v1/users/register: Registro de un nuevo usuario.
 POST /api/v1/users/login: Inicio de sesión de un usuario.
-GET /api/v1/users: Buscar lista de asistentes.
-PUT /api/v1/users/:id: Actualizar tu perfil de usuario.
-DEL /api/v1/users/:id: Borrar tu perfil de usuario.
+GET /api/v1/users: Buscar lista de asistentes si esta autenticado.
+GET /api/v1/users: Buscar un asistentes si esta autenticado.
+PUT /api/v1/users/:id: Actualizar tu perfil de usuario si esta autenticado.
+DEL /api/v1/users/:id: Borrar tu perfil de usuario si esta autenticado.
 
 ### Eventos
 
-GET /api/v1/eventos: Obtener todos los eventos.
-POST /api/v1/eventos: Crear un evento.
-PUT /api/v1/eventos/:id: Actualizar un evento, como lista de asistentes.
-DELETE /api/v1/eventos/:id: Borrar el evento y su archivo asociado en Cloudinary.
+GET /api/v1/eventos: Obtener todos los eventos si esta autenticado.
+POST /api/v1/eventos: Crear un evento, si es administrador.
+PUT /api/v1/eventos/:id: Actualizar un evento, como lista de asistentes, si es administrador.
+DELETE /api/v1/eventos/:id: Borrar el evento y su archivo asociado en Cloudinary, si es administrador.
 
 ## Funcionalidades
 
@@ -66,6 +67,7 @@ Seguridad: Implementación de autenticación con JWT.
 
 - npm i express dotenv mongoose bcrypt cors jsonwebtoken
 - npm i -D nodemon
+- npm i multer  multer-storage-cloudinary cloudinary
 
 
 ### añadir los scripts
@@ -84,3 +86,6 @@ Seguridad: Implementación de autenticación con JWT.
 DATABASE_URL=mongodb
 PORT=3000
 JWT_SECRET=tu_clave_secreta
+CLOUD_NAME=CLOUD_NAME
+API_KEY=API_KEY
+API_SECRET=API_SECRET
