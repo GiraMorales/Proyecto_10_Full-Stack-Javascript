@@ -2,5 +2,8 @@ import './Home.css';
 
 export const Home = () => {
   const main = document.querySelector('main');
-  main.innerHTML = '<h1>Estamos en la home</h1>';
+  main.innerHTML = '';
+  const homeDiv = document.createElement('div');
+  homeDiv.id = 'home';
+  main.append(homeDiv);
 };
