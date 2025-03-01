@@ -25,3 +25,10 @@ button {
   color: #fff;
   font-size: 15px;
 }
+
+.error {
+  color: red;
+  font-size: 40px;
+  font-weight: bold;
+  text-shadow: 0px 5px 5px rgba(233, 78, 39, 0.623);
+}
