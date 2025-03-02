@@ -1,3 +1,4 @@
+import { Header } from '../../components/Header/Header';
 import { Home } from '../Home/Home';
 import './LoginRegister.css';
 
@@ -27,13 +28,12 @@ const Login = (elementoPadre) => {
   button.textContent = 'Login';
 
   elementoPadre.append(form);
-  form.append(inputEmail);
-  form.append(inputPass);
-  form.append(button);
+  form.append(inputEmail, inputPass, button);
 
-  form.addEventListener('submit', () =>
-    submit(inputEmail.value, inputPass.value, form)
-  );
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    submit(inputEmail.value, inputPass.value, form);
+  });
 };
 
 const submit = async (email, password, form) => {
@@ -44,29 +44,47 @@ const submit = async (email, password, form) => {
     pErrorPrevio.remove();
   }
 
-  const res = await fetch('http://localhost:3001/api/v1/users/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ email, password })
-  });
-  if (res.status === 404) {
-    const pError = document.createElement('p');
-    pError.classList.add('error');
-    pError.textContent = 'Usuario o contraseña incorrectos';
-    form.append(pError);
-    return;
+  try {
+    const res = await fetch('http://localhost:3000/api/v1/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
+    });
+
+    if (res.status === 404) {
+      mostrarError(form, 'Usuario o contraseña incorrectos');
+      return;
+    }
+
+    if (res.status !== 200) {
+      mostrarError(form, 'Error al conectar con el servidor');
+      return;
+    }
+
+    const respuestaFinal = await res.json();
+    console.log(respuestaFinal);
+
+    localStorage.setItem('token', respuestaFinal.token);
+    localStorage.setItem('user', JSON.stringify(respuestaFinal.user));
+
+    Home();
+    Header();
+  } catch (error) {
+    console.error('Error de red o servidor:', error);
+    mostrarError(form, 'No se pudo conectar al servidor');
+  }
+};
+
+const mostrarError = (form, mensaje) => {
+  const pErrorPrevio = form.querySelector('.error');
+  if (pErrorPrevio) {
+    pErrorPrevio.remove();
   }
 
-  const pError = document.querySelector('.error');
-  if (pError) {
-    pError.remove();
-  }
-
-  const respuestaFinal = await res.json();
-  console.log(respuestaFinal);
-  localStorage.setItem('token', respuestaFinal.token);
-  // localStorage.setItem('user', JSON.stringify(respuestaFinal.user));
-  Home();
+  const pError = document.createElement('p');
+  pError.classList.add('error');
+  pError.textContent = mensaje;
+  form.append(pError);
 };
