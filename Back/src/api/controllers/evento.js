@@ -3,7 +3,10 @@ const { Evento } = require('../models/evento');
 
 const getEventos = async (req, res, next) => {
   try {
-    const eventos = await Evento.find().populate('relatedUsers', 'userName');
+    const eventos = await Evento.find().populate(
+      'relatedUsers',
+      'userName email'
+    );
     return res.status(200).json(eventos);
   } catch (error) {
     return res.status(400).json('error al buscar los eventos');

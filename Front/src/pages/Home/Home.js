@@ -40,7 +40,7 @@ const pintarEventos = (eventos, elementoPadre) => {
     ubicacion.textContent = `Ubicación: ${evento.ubicacion}`;
     const ListaUsers = document.createElement('p');
     ListaUsers.textContent = `Lista de asistentes: ${evento.relatedUsers
-      .map((user) => user.userName)
+      .map((user) => `${user.userName} (${user.email})`)
       .join(', ')}`;
     divEvento.append(h2);
     divEvento.append(imagen);
