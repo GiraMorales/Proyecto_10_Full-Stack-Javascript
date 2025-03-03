@@ -25,29 +25,32 @@ export const Home = async () => {
 };
 
 const pintarEventos = (eventos, elementoPadre) => {
+  // const divEventos = document.createElement('div');
   for (const evento of eventos) {
     const divEvento = document.createElement('div');
-    divEvento.classList.add('evento');
     const h2 = document.createElement('h2');
-    h2.textContent = evento.titulo;
     const imagen = document.createElement('img');
-    imagen.src = evento.portada;
     const p = document.createElement('p');
+    const info = document.createElement('div');
+
+    divEvento.classList.add('evento');
+    // divEventos.classList.add('eventos');
+    p.classList.add('descripcion');
+    info.classList.add('info');
+
+    h2.textContent = evento.titulo;
+    imagen.src = evento.portada;
     p.textContent = evento.descripcion;
-    const fecha = document.createElement('p');
-    fecha.textContent = `Fecha: ${evento.fecha}`;
-    const ubicacion = document.createElement('p');
-    ubicacion.textContent = `Ubicación: ${evento.ubicacion}`;
-    const ListaUsers = document.createElement('p');
-    ListaUsers.textContent = `Lista de asistentes: ${evento.relatedUsers
+
+    info.innerHTML = `<p> Fecha: ${evento.fecha}</p>
+    <p>Ubicación: ${evento.ubicacion}</p>
+    <p>Lista de asistentes: ${evento.relatedUsers
       .map((user) => `${user.userName} (${user.email})`)
-      .join(', ')}`;
-    divEvento.append(h2);
-    divEvento.append(imagen);
-    divEvento.append(p);
-    divEvento.append(fecha);
-    divEvento.append(ubicacion);
-    divEvento.append(ListaUsers);
+      .join(', ')}</p>`;
+
+    divEvento.append(h2, imagen, p, info);
     elementoPadre.append(divEvento);
+    // divEventos.append(divEvento);
   }
+  // elementoPadre.append(divEventos);
 };
