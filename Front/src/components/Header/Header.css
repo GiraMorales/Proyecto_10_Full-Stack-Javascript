@@ -21,3 +21,22 @@ nav a {
   text-decoration: none;
   font-size: 25px;
 }
+
+span {
+  font-size: 40px;
+  color: #fff;
+}
+
+.left-container {
+  display: flex;
+}
+
+.right-container {
+  display: flex;
+}
+
+.center-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
