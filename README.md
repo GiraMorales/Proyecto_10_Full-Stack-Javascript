@@ -41,7 +41,7 @@ Seguridad: Implementación de autenticación con JWT.
 
 ## Tecnologías Utilizadas
 
-- **Node.js** 
+- **Node.js**
 - **Express**
 - **MongoDB(Atlas)**
 - **Nodemon** (me permite tener el proyecto abierto todo el rato)
@@ -57,18 +57,9 @@ Seguridad: Implementación de autenticación con JWT.
 
 - https://github.com/GiraMorales/Proyecto_10_Full-Stack-Javascript.git
 
-
 ### Incializar un paquete de npm
 
 - npm init -y
-
-
-### Instalación de las librerias
-
-- npm i express dotenv mongoose bcrypt cors jsonwebtoken
-- npm i -D nodemon
-- npm i multer  multer-storage-cloudinary cloudinary
-
 
 ### añadir los scripts
 
@@ -79,7 +70,6 @@ Seguridad: Implementación de autenticación con JWT.
 `Para levantar la base de datos`
 
 - "dev": "nodemon index.js"
-
 
 ### Variables del entorno
 
