@@ -11,7 +11,7 @@ const {
 
 const eventosRouter = require('express').Router();
 
-eventosRouter.get('/', [isAuth], getEventos);
+eventosRouter.get('/', getEventos);
 eventosRouter.get('/:id', [isAuth], getEventoById);
 eventosRouter.post(
   '/',

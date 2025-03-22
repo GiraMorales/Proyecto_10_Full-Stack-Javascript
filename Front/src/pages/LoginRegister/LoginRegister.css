@@ -1,34 +1,46 @@
-#login > form {
+.login-register-container > form {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 25px;
-  height: 80svh;
+  height: 70svh;
 }
 
-#login input {
-  width: 200px;
+.login-register-container input {
+  width: 500px;
   height: 30px;
   padding: 5px 30px;
   border-radius: 10px;
-  border: 1px solid #06039b;
-  background-color: #05039b18;
+  border: 1px solid #722304;
+  background-color: #e9d0b8b6;
 }
 
 button {
-  width: 100px;
-  height: 30px;
+  width: 570px;
+  height: 45px;
   border-radius: 10px;
   border: none;
-  background-color: #06039b;
+  background-color: #722304;
   color: #fff;
   font-size: 15px;
 }
 
 .error {
-  color: red;
+  margin-top: 20px;
+  color: rgb(170, 58, 43);
   font-size: 40px;
   font-weight: bold;
   text-shadow: 0px 5px 5px rgba(233, 78, 39, 0.623);
+}
+
+.registerLink {
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 200px;
+  margin-top: -120px;
 }

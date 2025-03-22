@@ -1,16 +1,11 @@
+import { EventosAsistire } from '../../pages/EventosAsistire/EventosAsistire';
 import { Home } from '../../pages/Home/Home';
 import { LoginRegister } from '../../pages/LoginRegister/LoginRegister';
 import './Header.css';
 
 const routes = [
-  {
-    texto: 'Home',
-    funcion: Home
-  },
-  {
-    texto: 'Login',
-    funcion: LoginRegister
-  }
+  { texto: 'Home', funcion: Home },
+  { texto: 'Login', funcion: LoginRegister }
 ];
 
 export const Header = () => {
@@ -26,34 +21,33 @@ export const Header = () => {
   rightContainer.classList.add('right-container');
   centerContainer.classList.add('center-container');
 
-  // Enlace Home
   const homeLink = document.createElement('a');
   homeLink.href = '#';
   homeLink.textContent = 'Home';
-  homeLink.addEventListener('click', (e) => {
-    Home();
-  });
-
+  homeLink.addEventListener('click', Home);
   leftContainer.append(homeLink);
 
-  const a = document.createElement('a');
   const token = localStorage.getItem('token');
-  const user = localStorage.getItem('user');
+  const user = JSON.parse(localStorage.getItem('user')); // ✅ Parseamos el usuario
 
   if (token) {
-    a.textContent = 'Cerrar sesión';
-    a.addEventListener('click', () => {
+    const eventosLink = document.createElement('a');
+    eventosLink.href = '#';
+    eventosLink.textContent = 'Eventos a los que voy';
+    eventosLink.addEventListener('click', EventosAsistire);
+    centerContainer.append(eventosLink);
+
+    const logoutLink = document.createElement('a');
+    logoutLink.href = '#';
+    logoutLink.textContent = 'Cerrar sesión';
+    logoutLink.addEventListener('click', () => {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      localStorage.removeItem('eventosAsistire');
       Header();
+      Home();
     });
-    rightContainer.append(a);
-
-    if (user && user.userName) {
-      const spanUser = document.createElement('span');
-      spanUser.textContent = `Hola, ${user.userName}. Aquí tienes tus eventos`;
-      centerContainer.append(spanUser);
-    }
+    rightContainer.append(logoutLink);
   } else {
     const loginLink = document.createElement('a');
     loginLink.href = '#';
@@ -61,7 +55,7 @@ export const Header = () => {
     loginLink.addEventListener('click', LoginRegister);
     rightContainer.append(loginLink);
   }
-  // Añadir los contenedores al nav y el nav al header
+
   nav.append(leftContainer, centerContainer, rightContainer);
   header.append(nav);
 };

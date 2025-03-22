@@ -34,8 +34,10 @@ const Login = (elementoPadre) => {
   inputPass.placeholder = '*******';
   button.textContent = 'Login';
 
+  registerLink.classList.add('registerLink');
   registerLink.textContent = '¿No tienes cuenta? Regístrate aquí.';
   registerLink.style.cursor = 'pointer';
+
   registerLink.addEventListener('click', () => {
     elementoPadre.innerHTML = '';
     Register(elementoPadre);
@@ -70,6 +72,7 @@ const Register = (elementoPadre) => {
   inputUser.placeholder = 'Usuario';
   button.textContent = 'Registrarse';
 
+  registerLink.classList.add('registerLink');
   loginLink.textContent = '¿Ya tienes cuenta? Inicia sesión aquí.';
   loginLink.style.cursor = 'pointer';
   loginLink.addEventListener('click', () => {
@@ -163,14 +166,28 @@ const submitRegister = async (userName, email, password, form) => {
     }
 
     const respuestaFinal = await res.json();
-    console.log(respuestaFinal);
+    console.log('Respuesta del servidor:', respuestaFinal);
 
+    //Verificamos si el token está presente en la respuesta
+    if (!respuestaFinal.token) {
+      console.error(
+        'Error: No se recibió un token en la respuesta del servidor.'
+      );
+      return;
+    }
+
+    //Guardamos el token en localStorage
     localStorage.setItem('token', respuestaFinal.token);
-    localStorage.setItem('user', respuestaFinal.user);
+    console.log(
+      'Token guardado en localStorage:',
+      localStorage.getItem('token')
+    );
 
-    Home();
-    Header();
+    //Redirigir al home
+    setTimeout(() => {
+      Home();
+    }, 200);
   } catch (error) {
-    mostrarError(form, 'No se pudo conectar al servidor');
+    console.error('Error al registrar:', error);
   }
 };
