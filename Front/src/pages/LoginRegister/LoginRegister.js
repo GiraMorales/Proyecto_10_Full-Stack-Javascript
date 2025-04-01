@@ -72,7 +72,7 @@ const Register = (elementoPadre) => {
   inputUser.placeholder = 'Usuario';
   button.textContent = 'Registrarse';
 
-  registerLink.classList.add('registerLink');
+  loginLink.classList.add('registerLink');
   loginLink.textContent = '¿Ya tienes cuenta? Inicia sesión aquí.';
   loginLink.style.cursor = 'pointer';
   loginLink.addEventListener('click', () => {
@@ -159,14 +159,23 @@ const submitRegister = async (userName, email, password, form) => {
       },
       body: JSON.stringify({ userName, email, password })
     });
+    console.log('Código de estado:', res.status);
+    const respuestaFinal = await res.json();
+    console.log('Respuesta del servidor:', respuestaFinal);
 
-    if (res.status === 404) {
-      mostrarError(form, 'Error al registrar el usuario');
+    // Si el usuario ya existe (400), mostrar el mensaje en pantalla
+    if (res.status === 400) {
+      const errorMensaje =
+        respuestaFinal.message || 'Usuario ya existe, prueba con otro.';
+      mostrarError(form, errorMensaje);
       return;
     }
 
-    const respuestaFinal = await res.json();
-    console.log('Respuesta del servidor:', respuestaFinal);
+    // Si hay otro error desconocido
+    if (!res.ok) {
+      mostrarError(form, 'Error al registrar el usuario');
+      return;
+    }
 
     //Verificamos si el token está presente en la respuesta
     if (!respuestaFinal.token) {
@@ -176,18 +185,18 @@ const submitRegister = async (userName, email, password, form) => {
       return;
     }
 
-    //Guardamos el token en localStorage
-    localStorage.setItem('token', respuestaFinal.token);
-    console.log(
-      'Token guardado en localStorage:',
-      localStorage.getItem('token')
-    );
+    // Si el registro es exitoso (201)
+    if (res.status === 201) {
+      localStorage.setItem('token', respuestaFinal.token);
+      console.log(
+        '✅ Token guardado en localStorage:',
+        localStorage.getItem('token')
+      );
 
-    //Redirigir al home
-    setTimeout(() => {
-      Home();
-    }, 200);
+      setTimeout(() => Home(), 200);
+    }
   } catch (error) {
     console.error('Error al registrar:', error);
+    mostrarError(form, 'No se pudo conectar al servidor');
   }
 };

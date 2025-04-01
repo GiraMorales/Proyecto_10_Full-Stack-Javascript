@@ -3,28 +3,28 @@ header {
   position: sticky;
   top: 0;
   height: 10svh;
-  box-shadow: 0px 30px 30px -30px rgba(54, 54, 54, 0.75);
+  box-shadow: var(--p10-shadow);
 }
 
 nav {
   display: flex;
   justify-content: space-around;
-  gap: 30px;
+  gap: var(--p10-gap-m);
   align-items: center;
   height: 100%;
-  background-color: #e97d5d;
-  border-radius: 20px;
+  background-color: var(--p10-primary);
+  border-radius: var(--p10-border-radius-xl);
 }
 
 nav a {
-  color: #fff;
+  color: var(--p10-color-text);
   text-decoration: none;
-  font-size: 25px;
+  font-size: var(--p10-fontsize-s);
 }
 
 span {
-  font-size: 40px;
-  color: #fff;
+  font-size: var(--p10-fontsize-l);
+  color: var(--p10-color-text);
 }
 
 .left-container {
@@ -39,4 +39,20 @@ span {
   display: flex;
   align-items: center;
   height: 100%;
+}
+
+.eventos-admin-menu {
+  display: flex;
+  gap: var(--p10-gap-xs);
+  margin-left: var(--p10-margin-m);
+}
+
+.eventos-admin-menu a {
+  color: var(--p10-terciary);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.eventos-admin-menu a:hover {
+  text-decoration: underline;
 }

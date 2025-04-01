@@ -3,14 +3,15 @@ footer {
   margin-bottom: 0;
   width: 100%;
   height: 10svh;
-  box-shadow: 0px 30px 30px -30px rgba(54, 54, 54, 0.75);
-  background-color: #a06250;
-  border-radius: 20px;
+  box-shadow: var(--p10-shadow);
+  background-color: var(--p10-color-background-secondary);
+  border-radius: var(--p10-border-radius-xl);
   align-items: center;
   justify-content: center;
+  margin-top: var(--p10-margin-l);
 }
 
 h3 {
-  color: #ebe0dd;
-  margin-top: 20px;
+  color: var(--p10-color-text);
+  margin-top: var(--p10-margin-s);
 }

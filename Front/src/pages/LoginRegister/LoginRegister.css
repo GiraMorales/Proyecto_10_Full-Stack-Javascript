@@ -3,39 +3,39 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 25px;
+  gap: var(--p10-gap-s);
   height: 70svh;
 }
 
 .login-register-container input {
   width: 500px;
   height: 30px;
-  padding: 5px 30px;
-  border-radius: 10px;
-  border: 1px solid #722304;
-  background-color: #e9d0b8b6;
+  padding: var(--p10-padding-xs) var(--p10-padding-l);
+  border-radius: var(--p10-border-radius-m);
+  border: 1px solid var(--p10-botton);
+  background-color: var(--p10-secondary);
 }
 
 button {
-  width: 570px;
+  width: 560px;
   height: 45px;
-  border-radius: 10px;
+  border-radius: var(--p10-border-radius-m);
   border: none;
-  background-color: #722304;
-  color: #fff;
-  font-size: 15px;
+  background-color: var(--p10-botton);
+  color: var(--p10-letterbotton);
+  font-size: var(--p10-fontsize-xs);
 }
 
 .error {
-  margin-top: 20px;
-  color: rgb(170, 58, 43);
-  font-size: 40px;
+  margin-top: var(--p10-margin-m);
+  color: var(--p10-letterError);
+  font-size: var(--p10-fontsize-l);
   font-weight: bold;
   text-shadow: 0px 5px 5px rgba(233, 78, 39, 0.623);
 }
 
 .registerLink {
-  font-size: 20px;
+  font-size: var(--p10-fontsize-s);
   font-weight: bold;
   display: flex;
   flex-direction: column;
