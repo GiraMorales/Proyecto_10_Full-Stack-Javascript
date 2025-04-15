@@ -39,6 +39,9 @@ span {
   display: flex;
   align-items: center;
   height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--p10-gap-xs);
 }
 
 .eventos-admin-menu {
@@ -55,4 +58,13 @@ span {
 
 .eventos-admin-menu a:hover {
   text-decoration: underline;
+}
+
+form {
+  display: flex;
+  margin-top: var(--p10-margin-l);
+
+  gap: var(--p10-gap-l);
+  align-items: center;
+  flex-direction: column;
 }

@@ -43,19 +43,48 @@ const register = async (req, res, next) => {
   }
 };
 
+// const login = async (req, res, next) => {
+//   try {
+//     const { email, password } = req.body;
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return res.status(404).json('Usuario o contraseña incorrectos');
+//     }
+//     if (bcrypt.compareSync(password, user.password)) {
+//       const token = generateSing(user._id);
+//       return res.status(200).json({ token, user });
+//     }
+//     return res.status(404).json('Usuario o contraseña incorrectos');
+//   } catch (error) {
+//     return res.status(400).json('error al encontrar el usuario');
+//   }
+// };
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
+
     if (!user) {
       return res.status(404).json('Usuario o contraseña incorrectos');
     }
-    if (bcrypt.compareSync(password, user.password)) {
-      const token = generateSing(user._id);
-      return res.status(200).json({ token, user });
+
+    const isPasswordValid = bcrypt.compareSync(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(404).json('Usuario o contraseña incorrectos');
     }
-    return res.status(404).json('Usuario o contraseña incorrectos');
+
+    const token = generateSing(user._id);
+
+    return res.status(200).json({
+      token,
+      user: {
+        userName: user.userName,
+        email: user.email,
+        role: user.role
+      }
+    });
   } catch (error) {
+    console.error('Login error:', error);
     return res.status(400).json('error al encontrar el usuario');
   }
 };

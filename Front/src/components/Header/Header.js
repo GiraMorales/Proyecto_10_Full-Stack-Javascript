@@ -8,8 +8,9 @@ import './Header.css';
 const routes = [
   { texto: 'Home', funcion: Home },
   { texto: 'Login', funcion: LoginRegister },
-  { texto: 'EventosAsistentes', funcion: EventosAsistentes },
-  { texto: 'CrearEvento', funcion: CrearEvento }
+  { texto: 'Eventos a los que voy', funcion: EventosAsistire },
+  { texto: 'Eventos y Asistentes', funcion: EventosAsistentes },
+  { texto: 'Crear Evento', funcion: CrearEvento }
 ];
 
 export const Header = () => {
@@ -25,48 +26,40 @@ export const Header = () => {
   rightContainer.classList.add('right-container');
   centerContainer.classList.add('center-container');
 
-  const homeLink = document.createElement('a');
-  homeLink.href = '#';
-  homeLink.textContent = 'Home';
-  homeLink.addEventListener('click', Home);
-  leftContainer.append(homeLink);
-
+  // Generar enlaces dinámicamente desde `routes`
   const token = localStorage.getItem('token');
   const user = JSON.parse(localStorage.getItem('user')); // Obtener usuario
 
-  if (token) {
-    centerContainer.innerHTML = ''; // Limpiamos el centro para evitar duplicados
+  routes.forEach((route) => {
+    const link = document.createElement('a');
+    link.href = '#';
+    link.textContent = route.texto;
+    link.addEventListener('click', route.funcion);
 
-    if (user && user.role === 'admin') {
-      // 🛠 MENÚ PARA ADMINISTRADORES
-      const menuAdmin = document.createElement('div');
-      menuAdmin.classList.add('menu-admin');
+    // Mostrar enlaces según el rol del usuario
+    if (route.texto === 'Login' && token) return; // No mostrar "Login" si el usuario está autenticado
+    if (
+      route.texto === 'Eventos y Asistentes' &&
+      (!user || user.role !== 'admin')
+    )
+      if (route.texto === 'Crear Evento' && (!user || user.role !== 'admin'))
+        return; // Solo admins
 
-      const tituloAdmin = document.createElement('a');
-      tituloAdmin.href = '#';
-      tituloAdmin.textContent = 'Menú Administrador';
-
-      const eventosAsistentesLink = document.createElement('a');
-      eventosAsistentesLink.href = '#';
-      eventosAsistentesLink.textContent = 'Eventos y Asistentes';
-      eventosAsistentesLink.addEventListener('click', EventosAsistentes);
-
-      const crearEventoLink = document.createElement('a');
-      crearEventoLink.href = '#';
-      crearEventoLink.textContent = 'Crear Evento';
-      crearEventoLink.addEventListener('click', CrearEvento);
-
-      menuAdmin.append(tituloAdmin, eventosAsistentesLink, crearEventoLink);
-      centerContainer.append(menuAdmin);
+    // Agregar enlaces al contenedor correspondiente
+    if (route.texto === 'Home') {
+      console.log(`Agregando ${route.texto} al leftContainer`);
+      leftContainer.append(link);
+    } else if (route.texto === 'Login' || route.texto === 'Cerrar sesión') {
+      console.log(`Agregando ${route.texto} al rightContainer`);
+      rightContainer.append(link);
     } else {
-      // 🔹 MENÚ NORMAL PARA USUARIO
-      const eventosLink = document.createElement('a');
-      eventosLink.href = '#';
-      eventosLink.textContent = 'Eventos a los que voy';
-      eventosLink.addEventListener('click', EventosAsistire);
-      centerContainer.append(eventosLink);
+      console.log(`Agregando ${route.texto} al centerContainer`);
+      centerContainer.append(link);
     }
+  });
 
+  // Agregar enlace de "Cerrar sesión" si el usuario está autenticado
+  if (token) {
     const logoutLink = document.createElement('a');
     logoutLink.href = '#';
     logoutLink.textContent = 'Cerrar sesión';
@@ -77,12 +70,6 @@ export const Header = () => {
       Home();
     });
     rightContainer.append(logoutLink);
-  } else {
-    const loginLink = document.createElement('a');
-    loginLink.href = '#';
-    loginLink.textContent = 'Login';
-    loginLink.addEventListener('click', LoginRegister);
-    rightContainer.append(loginLink);
   }
 
   nav.append(leftContainer, centerContainer, rightContainer);

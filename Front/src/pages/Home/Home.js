@@ -37,6 +37,12 @@ export const Home = async () => {
       return;
     }
 
+    // Verificar si el usuario es administrador y mostrar opciones
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.role === 'admin') {
+      mostrarOpcionesAdmin();
+    }
+
     pintarEventos(eventos, main);
   } catch (error) {
     console.error('❌ Error al obtener eventos:', error);
@@ -101,14 +107,16 @@ const pintarEventos = (eventos, elementoPadre) => {
   }
 };
 
-// ✅ Actualiza el texto del botón según si el usuario ya está asistiendo
 const actualizarBotonAsistir = (evento, boton) => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (!user || !user.userName) return;
+
   const eventosGuardados =
-    JSON.parse(localStorage.getItem('eventosAsistire')) || [];
+    JSON.parse(localStorage.getItem(`eventosAsistire_${user.userName}`)) || [];
   const asistiendo = eventosGuardados.some((e) => e._id === evento._id);
   boton.textContent = asistiendo ? 'No voy' : 'Voy a ir';
+  boton.classList.toggle('activo', asistiendo);
 };
-
 // ✅ Alterna la asistencia a eventos en localStorage
 const toggleEventoAsistire = (evento) => {
   if (!evento || !evento._id) {
@@ -116,24 +124,20 @@ const toggleEventoAsistire = (evento) => {
     return;
   }
 
-  let eventosAsistire =
-    JSON.parse(localStorage.getItem('eventosAsistire')) || [];
-  console.log('Eventos actuales en localStorage:', eventosAsistire);
-
   const user = JSON.parse(localStorage.getItem('user'));
-
   if (!user || !user.userName) {
     console.warn('❌ Usuario no válido o no logueado.');
     return;
   }
 
+  const key = `eventosAsistire_${user.userName}`;
+  let eventosAsistire = JSON.parse(localStorage.getItem(key)) || [];
+
   const eventoIndex = eventosAsistire.findIndex((e) => e._id === evento._id);
 
   if (eventoIndex !== -1) {
-    // Si el evento ya está guardado, eliminarlo
     eventosAsistire.splice(eventoIndex, 1);
   } else {
-    // Si no está guardado, agregarlo
     eventosAsistire.push({
       _id: evento._id,
       titulo: evento.titulo,
@@ -144,25 +148,26 @@ const toggleEventoAsistire = (evento) => {
     });
   }
 
-  // Guardar la lista actualizada en localStorage
-  localStorage.setItem('eventosAsistire', JSON.stringify(eventosAsistire));
+  localStorage.setItem(key, JSON.stringify(eventosAsistire));
+  console.log(
+    `✅ Evento actualizado en localStorage para ${user.userName}:`,
+    eventosAsistire
+  );
 
-  console.log('✅ Evento actualizado en localStorage:', eventosAsistire);
-
-  // Si el usuario es admin, mostrar opciones extra
   if (user.role === 'admin') {
-    mostrarOpcionesAdmin();
+    mostrarOpcionesAdmin?.(); // Usamos ?. para evitar error si no está definida
   }
 };
 
 // Mostrar opciones de administrador
 function mostrarOpcionesAdmin() {
   const nav = document.querySelector('nav'); // Asegúrate de que el <nav> existe
-  if (nav) {
-    nav.append(eventosAdmin, crearEvento);
-  } else {
+  if (!nav) {
     console.warn('❌ No se encontró <nav> en el DOM');
+    return;
   }
+
+  // Crear los enlaces del panel de administrador
   const eventosAdmin = document.createElement('a');
   eventosAdmin.href = '#/eventos-asistentes';
   eventosAdmin.textContent = 'Eventos y Asistentes';
@@ -171,5 +176,6 @@ function mostrarOpcionesAdmin() {
   crearEvento.href = '#/crear-evento';
   crearEvento.textContent = 'Crear Evento';
 
+  // Agregar los enlaces al <nav>
   nav.append(eventosAdmin, crearEvento);
 }
