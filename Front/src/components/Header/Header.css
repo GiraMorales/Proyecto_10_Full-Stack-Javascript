@@ -19,7 +19,7 @@ nav {
 nav a {
   color: var(--p10-color-text);
   text-decoration: none;
-  font-size: var(--p10-fontsize-s);
+  font-size: var(--p10-fontsize-m);
 }
 
 span {
@@ -39,9 +39,7 @@ span {
   display: flex;
   align-items: center;
   height: 100%;
-  flex-direction: column;
-  justify-content: center;
-  gap: var(--p10-gap-xs);
+  width: 60%;
   flex-direction: row;
 }
 

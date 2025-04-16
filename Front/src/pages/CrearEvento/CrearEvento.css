@@ -10,3 +10,20 @@
   font-size: var(--p10-fontsize-m);
   color: var(--p10-secondary);
 }
+
+#titulo {
+  font-weight: bold;
+}
+
+#portada,
+#descripcion,
+#fecha,
+#ubicacion,
+#titulo {
+  font-size: var(--p10-fontsize-s);
+  color: var(--p10-color-text);
+  margin-top: var(--p10-margin-s);
+  text-align: center;
+  width: 100%; /* Set width to 100% */
+  padding: var(--p10-padding-xs);
+}
