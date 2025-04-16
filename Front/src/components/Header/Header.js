@@ -36,24 +36,23 @@ export const Header = () => {
     link.textContent = route.texto;
     link.addEventListener('click', route.funcion);
 
-    // Mostrar enlaces según el rol del usuario
-    if (route.texto === 'Login' && token) return; // No mostrar "Login" si el usuario está autenticado
+    // FILTRO DE VISIBILIDAD SEGÚN USUARIO Y ROL
+    if (route.texto === 'Login' && token) return;
+    if (route.texto === 'Eventos a los que voy' && !token) return;
     if (
       route.texto === 'Eventos y Asistentes' &&
       (!user || user.role !== 'admin')
     )
-      if (route.texto === 'Crear Evento' && (!user || user.role !== 'admin'))
-        return; // Solo admins
+      return;
+    if (route.texto === 'Crear Evento' && (!user || user.role !== 'admin'))
+      return;
 
-    // Agregar enlaces al contenedor correspondiente
+    // 📍 ORGANIZACIÓN POR SECCIÓN
     if (route.texto === 'Home') {
-      console.log(`Agregando ${route.texto} al leftContainer`);
       leftContainer.append(link);
     } else if (route.texto === 'Login' || route.texto === 'Cerrar sesión') {
-      console.log(`Agregando ${route.texto} al rightContainer`);
       rightContainer.append(link);
     } else {
-      console.log(`Agregando ${route.texto} al centerContainer`);
       centerContainer.append(link);
     }
   });

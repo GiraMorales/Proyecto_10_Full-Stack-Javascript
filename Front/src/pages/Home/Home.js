@@ -39,7 +39,7 @@ export const Home = async () => {
 
     // Verificar si el usuario es administrador y mostrar opciones
     const user = JSON.parse(localStorage.getItem('user'));
-    if (user && user.role === 'admin') {
+    if (user && user.rol === 'admin') {
       mostrarOpcionesAdmin();
     }
 
@@ -154,7 +154,7 @@ const toggleEventoAsistire = (evento) => {
     eventosAsistire
   );
 
-  if (user.role === 'admin') {
+  if (user.rol === 'admin') {
     mostrarOpcionesAdmin?.(); // Usamos ?. para evitar error si no está definida
   }
 };

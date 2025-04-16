@@ -324,6 +324,8 @@ const submitLogin = async (email, password, form) => {
 
     if (!respuestaFinal.token || !respuestaFinal.user) {
       mostrarError(form, 'Faltan datos en la respuesta del servidor');
+      console.log('Usuario que se ha logueado:', respuestaFinal.user);
+
       return;
     }
 
