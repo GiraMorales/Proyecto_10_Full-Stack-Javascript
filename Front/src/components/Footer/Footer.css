@@ -11,7 +11,7 @@ footer {
   margin-top: var(--p10-margin-l);
 }
 
-h3 {
+footer h3 {
   color: var(--p10-color-text);
   margin-top: var(--p10-margin-s);
 }

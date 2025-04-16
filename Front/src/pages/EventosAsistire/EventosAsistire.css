@@ -2,6 +2,6 @@ main > h3 {
   font-size: var(--p10-fontsize-m);
   display: flex;
   justify-content: center;
-  margin-top: var(--p10-margin-m);
+  margin-top: var(--p10-margin-l);
   color: var(--p10-color-text-secondary);
 }

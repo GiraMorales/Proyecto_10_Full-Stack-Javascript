@@ -1,6 +1,6 @@
+import { Header } from '../../components/Header/Header';
 import './Home.css';
 
-//'http://localhost:3000/api/v1/users/eventos'
 export const Home = async () => {
   console.log('✅ Home() ejecutado');
 
@@ -11,6 +11,7 @@ export const Home = async () => {
   }
 
   main.innerHTML = '';
+  Header(); // Llamada a Header para que se ejecute al cargar la página
 
   try {
     const token = localStorage.getItem('token');
@@ -40,7 +41,6 @@ export const Home = async () => {
     // Verificar si el usuario es administrador y mostrar opciones
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user.rol === 'admin') {
-      mostrarOpcionesAdmin();
     }
 
     pintarEventos(eventos, main);
@@ -153,29 +153,4 @@ const toggleEventoAsistire = (evento) => {
     `✅ Evento actualizado en localStorage para ${user.userName}:`,
     eventosAsistire
   );
-
-  if (user.rol === 'admin') {
-    mostrarOpcionesAdmin?.(); // Usamos ?. para evitar error si no está definida
-  }
 };
-
-// Mostrar opciones de administrador
-function mostrarOpcionesAdmin() {
-  const nav = document.querySelector('nav'); // Asegúrate de que el <nav> existe
-  if (!nav) {
-    console.warn('❌ No se encontró <nav> en el DOM');
-    return;
-  }
-
-  // Crear los enlaces del panel de administrador
-  const eventosAdmin = document.createElement('a');
-  eventosAdmin.href = '#/eventos-asistentes';
-  eventosAdmin.textContent = 'Eventos y Asistentes';
-
-  const crearEvento = document.createElement('a');
-  crearEvento.href = '#/crear-evento';
-  crearEvento.textContent = 'Crear Evento';
-
-  // Agregar los enlaces al <nav>
-  nav.append(eventosAdmin, crearEvento);
-}

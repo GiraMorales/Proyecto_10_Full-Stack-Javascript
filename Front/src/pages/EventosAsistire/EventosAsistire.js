@@ -30,7 +30,7 @@ export const EventosAsistire = async () => {
   pintarEventos(eventosGuardados, main);
 };
 
-// 🔁 Agrupa asistentes por evento leyendo todas las claves del localStorage
+// Agrupa asistentes por evento leyendo todas las claves del localStorage
 const obtenerEventosConAsistentes = () => {
   const eventosPorId = {};
 

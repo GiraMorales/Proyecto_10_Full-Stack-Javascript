@@ -1,0 +1,12 @@
+.crear-evento-contenedor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--p10-gap-s);
+  margin: var(--p10-margin-m);
+}
+
+.titulo-crear-evento {
+  font-size: var(--p10-fontsize-m);
+  color: var(--p10-secondary);
+}
