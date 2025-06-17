@@ -1,4 +1,5 @@
 import './EventosAsistentes.css';
+
 export const EventosAsistentes = () => {
   const main = document.querySelector('main');
   main.innerHTML = ''; // Limpiar el contenido del main

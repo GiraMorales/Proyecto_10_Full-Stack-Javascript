@@ -1,0 +1,97 @@
+.crear-evento-contenedor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--p10-gap-s);
+  margin: var(--p10-margin-xl);
+}
+
+#portada,
+#descripcion,
+#fecha,
+#ubicacion,
+#titulo {
+  font-size: var(--p10-fontsize-s);
+  color: var(--p10-color-text-secondary);
+  margin-top: var(--p10-margin-s);
+  text-align: center;
+  width: 150%;
+  padding: var(--p10-padding-xs);
+}
+#descripcion {
+  height: 200px;
+}
+
+#formCrearEvento button {
+  margin-bottom: 60px;
+  cursor: pointer;
+}
+#formCrearEvento {
+  align-items: center;
+}
+
+.admin-tabs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--p10-gap-s);
+  margin-top: var(--p10-margin-m);
+  width: 100%;
+  height: 80px;
+}
+
+.admin-tabs button {
+  width: 250%;
+  height: 80%;
+  font-size: var(--p10-fontsize-s);
+  color: var(--p10-letterbotton);
+  background-color: var(--p10-botton);
+  border: none;
+  border-radius: var(--p10-border-radius-m);
+  cursor: pointer;
+}
+
+.disabled {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--p10-color-background);
+}
+
+.btn-eliminar {
+  margin-bottom: 60px;
+  cursor: pointer;
+  width: 50%;
+}
+
+h3 {
+  text-align: center;
+  align-content: center;
+  width: 100%;
+  height: 60px;
+  font-size: var(--p10-fontsize-m);
+  color: var(--p10-secondary);
+  background-color: var(--p10-terciary);
+  border-radius: var(--p10-border-radius-xl);
+  box-shadow: var(--p10-shadow);
+}
+
+.titulo-crear-evento,
+.titulo-eliminar-evento {
+  font-size: var(--p10-fontsize-l);
+  color: var(--p10-secondary);
+  margin-top: var(--p10-margin-l);
+  width: 850px;
+  padding: var(--p10-padding-xs);
+}
+
+.evento {
+  background-color: var(--p10-color-background);
+  width: 100%;
+  padding: var(--p10-padding-xl);
+  margin: var(--p10-margin-m);
+  margin-left: -50px;
+}

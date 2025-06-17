@@ -2,8 +2,6 @@ import { Header } from '../../components/Header/Header';
 import './Home.css';
 
 export const Home = async () => {
-  console.log('✅ Home() ejecutado');
-
   const main = document.querySelector('main');
   if (!main) {
     console.error('❌ ERROR: <main> no encontrado en el DOM');
@@ -29,9 +27,7 @@ export const Home = async () => {
     if (!Array.isArray(eventos) || eventos.length === 0) {
       main.innerHTML = `
         <p>No hay eventos disponibles.</p>
-        <button id="reloadEvents">Recargar eventos</button>
-      `;
-
+        <button id="reloadEvents">Recargar eventos</button>`;
       document.getElementById('reloadEvents').addEventListener('click', () => {
         Home(); // Llamada para recargar los eventos
       });
@@ -41,13 +37,13 @@ export const Home = async () => {
     // Verificar si el usuario es administrador y mostrar opciones
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user.rol === 'admin') {
+      // Aquí podrías mostrar botones extra para admins
     }
 
     pintarEventos(eventos, main);
   } catch (error) {
     console.error('❌ Error al obtener eventos:', error);
-    main.innerHTML =
-      '<p>Error al cargar los eventos. Intenta de nuevo más tarde.</p>';
+    main.innerHTML = `<p>Error al cargar los eventos: ${error.message}</p>`;
   }
 };
 
@@ -73,23 +69,32 @@ const pintarEventos = (eventos, elementoPadre) => {
     const divEvento = document.createElement('div');
     divEvento.classList.add('evento');
 
+    const divTitulo = document.createElement('div');
+    divTitulo.classList.add('evento-titulo');
     const h2 = document.createElement('h2');
     h2.textContent = evento.titulo;
+    divTitulo.appendChild(h2);
+
+    const divDescripcion = document.createElement('div');
+    divDescripcion.classList.add('evento-descripcion');
 
     const imagen = document.createElement('img');
     imagen.src = evento.portada;
     imagen.alt = `Imagen de ${evento.titulo}`;
 
     const p = document.createElement('p');
-    p.classList.add('descripcion');
     p.textContent = evento.descripcion;
+    divDescripcion.append(imagen, p);
 
-    const info = document.createElement('div');
-    info.classList.add('info');
-    info.innerHTML = `<p>Fecha: ${evento.fecha}</p>
-    <p>Ubicación: ${evento.ubicacion}</p>`;
+    const divInfo = document.createElement('div');
+    divInfo.classList.add('evento-info');
+    divInfo.innerHTML = `
+      <p><strong>Fecha:</strong> ${evento.fecha}</p>
+      <p><strong>Ubicación:</strong> ${evento.ubicacion}</p>
+    `;
 
-    divEvento.append(h2, p, info, imagen);
+    const divBoton = document.createElement('div');
+    divBoton.classList.add('evento-boton');
 
     if (token) {
       const btnAsistir = document.createElement('button');
@@ -100,11 +105,15 @@ const pintarEventos = (eventos, elementoPadre) => {
         actualizarBotonAsistir(evento, btnAsistir);
       });
 
-      divEvento.append(btnAsistir);
+      divBoton.appendChild(btnAsistir);
     }
 
+    divEvento.append(divTitulo, divDescripcion, divInfo, divBoton);
     elementoPadre.append(divEvento);
   }
+
+  const divEvento = document.createElement('div');
+  divEvento.classList.add('evento');
 };
 
 const actualizarBotonAsistir = (evento, boton) => {
@@ -114,10 +123,10 @@ const actualizarBotonAsistir = (evento, boton) => {
   const eventosGuardados =
     JSON.parse(localStorage.getItem(`eventosAsistire_${user.userName}`)) || [];
   const asistiendo = eventosGuardados.some((e) => e._id === evento._id);
-  boton.textContent = asistiendo ? 'No voy' : 'Voy a ir';
+  boton.textContent = asistiendo ? 'Voy a ir' : 'No voy';
   boton.classList.toggle('activo', asistiendo);
 };
-// ✅ Alterna la asistencia a eventos en localStorage
+
 const toggleEventoAsistire = (evento) => {
   if (!evento || !evento._id) {
     console.error('El evento no es válido:', evento);

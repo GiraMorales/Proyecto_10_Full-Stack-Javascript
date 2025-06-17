@@ -2,6 +2,8 @@
   margin: 0;
   padding: 0;
   font-family: Georgia, 'Times New Roman', Times, serif;
+  text-decoration: none;
+  list-style: none;
 }
 
 body {
@@ -13,7 +15,7 @@ body {
   --p10-color-background-secondary: #a06250;
   --p10-primary: #e97d5d;
   --p10-secondary: #ebe0dd;
-  --p10r-terciary: #ff6600;
+  --p10-terciary: #ff6600;
   --p10-botton: #722304;
   --p10-letterError: rgb(170, 58, 43);
   --p10-letterbotton: #ffffff;
@@ -42,6 +44,7 @@ body {
   --p10-margin-m: 20px;
   --p10-margin-l: 30px;
   --p10-margin-xl: 40px;
+  --p10-margin-xxl: 100px;
 
   --p10-padding-xs: 5px;
   --p10-padding-s: 10px;

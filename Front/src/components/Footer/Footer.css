@@ -11,7 +11,9 @@ footer {
   margin-top: var(--p10-margin-l);
 }
 
-footer h3 {
+.titulo-footer {
   color: var(--p10-color-text);
   margin-top: var(--p10-margin-s);
+  width: 50%;
+  background-color: var(--p10-color-background-secondary);
 }

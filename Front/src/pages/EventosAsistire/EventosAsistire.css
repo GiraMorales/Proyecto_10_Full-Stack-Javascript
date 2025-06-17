@@ -2,6 +2,37 @@ main > h3 {
   font-size: var(--p10-fontsize-m);
   display: flex;
   justify-content: center;
-  margin-top: var(--p10-margin-l);
+  margin-top: var(--p10-margin-xl);
+  color: var(--p10-color-text-secondary);
+  width: 100%;
+  align-items: center;
+}
+
+h2 {
+  font-size: var(--p10-fontsize-l);
+  margin: var(--p10-margin-m);
+  width: 60%;
+  height: 80px;
+}
+
+.evento p {
+  font-size: var(--p10-fontsize-s);
+  margin: var(--p10-margin-m);
+}
+
+.evento h4 {
+  color: var(--p10-terciary);
+}
+
+.asistentes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--p10-gap-s);
+}
+
+.asistentes li {
+  font-size: var(--p10-fontsize-s);
   color: var(--p10-color-text-secondary);
 }

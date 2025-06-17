@@ -3,27 +3,26 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--p10-gap-s);
+  gap: var(--p10-gap-m);
   height: 70svh;
 }
 
-.login-register-container input {
-  width: 500px;
-  height: 30px;
-  padding: var(--p10-padding-xs) var(--p10-padding-l);
+.login-register-container input,
+form button {
+  width: 800px;
+  height: 60px;
+  padding: var(--p10-padding-xs) var(--p10-padding-m);
   border-radius: var(--p10-border-radius-m);
   border: 1px solid var(--p10-botton);
   background-color: var(--p10-secondary);
+  font-size: var(--p10-fontsize-s);
 }
 
-button {
-  width: 560px;
-  height: 45px;
-  border-radius: var(--p10-border-radius-m);
-  border: none;
+form button {
+  width: 500px;
   background-color: var(--p10-botton);
   color: var(--p10-letterbotton);
-  font-size: var(--p10-fontsize-xs);
+  font-size: var(--p10-fontsize-m);
 }
 
 .error {
@@ -35,7 +34,7 @@ button {
 }
 
 .registerLink {
-  font-size: var(--p10-fontsize-s);
+  font-size: var(--p10-fontsize-m);
   font-weight: bold;
   display: flex;
   flex-direction: column;

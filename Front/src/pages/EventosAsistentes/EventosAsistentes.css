@@ -6,16 +6,7 @@
   align-items: center;
 }
 
-.titulo-eventos-asistentes {
-  font-size: var(--p10-fontsize-m);
-  color: var(--p10-secondary);
-}
-
 main h4 {
   margin: var(--p10-margin-m);
   font-size: var(--p10-fontsize-m);
-}
-
-.eventos-asistentes-contenedor .evento p {
-  margin: var(--p10-margin-m);
 }

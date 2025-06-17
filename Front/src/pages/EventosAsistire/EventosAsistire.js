@@ -76,6 +76,9 @@ const pintarEventos = (eventosGuardados, elementoPadre) => {
     p.classList.add('descripcion');
     p.textContent = `Fecha: ${evento.fecha} | Ubicación: ${evento.ubicacion}`;
 
+    const tituloAsistentes = document.createElement('h4');
+    tituloAsistentes.textContent = 'Lista de asistentes:';
+
     const asistentesLista = document.createElement('ul');
     asistentesLista.classList.add('asistentes');
     asistentesLista.innerHTML =
@@ -83,7 +86,7 @@ const pintarEventos = (eventosGuardados, elementoPadre) => {
         ? evento.asistentes.map((asistente) => `<li>${asistente}</li>`).join('')
         : '<li>Aún no hay asistentes.</li>';
 
-    divEvento.append(h2, imagen, p, asistentesLista);
+    divEvento.append(h2, imagen, p, tituloAsistentes, asistentesLista);
     elementoPadre.append(divEvento);
   }
 };
@@ -94,8 +97,6 @@ const toggleEventoAsistire = (evento) => {
     return;
   }
 
-  let eventosAsistire =
-    JSON.parse(localStorage.getItem('eventosAsistire')) || [];
   const user = JSON.parse(localStorage.getItem('user'));
 
   if (!user || !user.userName) {
@@ -103,40 +104,29 @@ const toggleEventoAsistire = (evento) => {
     return;
   }
 
-  const eventoIndex = eventosAsistire.findIndex((e) => e._id === evento._id);
+  const claveUsuario = `eventosAsistire_${user.userName}`;
+  let eventosUsuario = JSON.parse(localStorage.getItem(claveUsuario)) || [];
+
+  const eventoIndex = eventosUsuario.findIndex((e) => e._id === evento._id);
 
   if (eventoIndex !== -1) {
-    // Si el evento ya está guardado, agregar o eliminar al usuario de la lista de asistentes
-    const asistentes = eventosAsistire[eventoIndex].asistentes || [];
-    const userIndex = asistentes.indexOf(user.userName);
-
-    if (userIndex !== -1) {
-      // Si el usuario ya está en la lista, eliminarlo
-      asistentes.splice(userIndex, 1);
-    } else {
-      // Si el usuario no está en la lista, agregarlo
-      asistentes.push(user.userName);
-    }
-
-    // Actualizar la lista de asistentes en el evento
-    eventosAsistire[eventoIndex].asistentes = asistentes;
-
-    // Si no quedan asistentes, elimina el evento
-    if (asistentes.length === 0) {
-      eventosAsistire.splice(eventoIndex, 1);
-    }
+    // Si el evento ya está guardado, quitarlo
+    eventosUsuario.splice(eventoIndex, 1);
   } else {
-    // Si no está guardado, agregarlo con el usuario como asistente
-    eventosAsistire.push({
+    // Si no está guardado, agregarlo
+    eventosUsuario.push({
       _id: evento._id,
       titulo: evento.titulo,
       portada: evento.portada,
       fecha: evento.fecha,
-      ubicacion: evento.ubicacion,
-      asistentes: [user.userName] // Agregar el usuario actual como asistente
+      ubicacion: evento.ubicacion
     });
   }
 
-  // Guardar la lista actualizada en localStorage
-  localStorage.setItem('eventosAsistire', JSON.stringify(eventosAsistire));
+  // Si quedan eventos, guardar la lista; si no, eliminar la clave
+  if (eventosUsuario.length > 0) {
+    localStorage.setItem(claveUsuario, JSON.stringify(eventosUsuario));
+  } else {
+    localStorage.removeItem(claveUsuario);
+  }
 };

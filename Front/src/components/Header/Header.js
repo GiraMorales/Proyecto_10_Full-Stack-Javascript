@@ -1,4 +1,4 @@
-import { CrearEvento } from '../../pages/CrearEvento/CrearEvento';
+import { AdministrarEventos } from '../../pages/AdministrarEventos/AdministrarEventos';
 import { EventosAsistentes } from '../../pages/EventosAsistentes/EventosAsistentes';
 import { EventosAsistire } from '../../pages/EventosAsistire/EventosAsistire';
 import { Home } from '../../pages/Home/Home';
@@ -10,7 +10,7 @@ const routes = [
   { texto: 'Login', funcion: LoginRegister },
   { texto: 'Eventos a los que voy', funcion: EventosAsistire },
   { texto: 'Eventos y Asistentes', funcion: EventosAsistentes },
-  { texto: 'Crear Evento', funcion: CrearEvento }
+  { texto: 'Administrar Eventos', funcion: AdministrarEventos }
 ];
 
 export const Header = () => {
@@ -48,7 +48,7 @@ export const Header = () => {
     if (
       (route.texto === 'Eventos y Asistentes' &&
         (!user || user.rol !== 'admin')) ||
-      (route.texto === 'Crear Evento' && (!user || user.rol !== 'admin'))
+      (route.texto === 'Administrar Eventos' && (!user || user.rol !== 'admin'))
     ) {
       return; // No agregar botones no autorizados
     }
