@@ -129,11 +129,16 @@ index.html # Entrada del frontend
 - No hay validación avanzada en el frontend.
 - No se implementó paginación en la lista de eventos.
 
+**Despliegue**
+
+Frontend: ([https://tu-front.vercel.[app](https://proyecto-10-full-stack-javascript-f.vercel.app/))
+Backend: (](https://proyecto-10-full-stack-javascript-b.vercel.app/)https://tu-back.vercel.app)
+
+
 ## Futuras mejoras
 - Implementar roles con más permisos detallados.
 - Añadir filtros y búsqueda avanzada.
 - Mejorar diseño responsive y accesibilidad.
-
 
 ## Contacto
 
