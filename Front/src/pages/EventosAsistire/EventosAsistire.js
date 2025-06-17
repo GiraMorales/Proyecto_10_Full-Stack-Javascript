@@ -1,4 +1,5 @@
 import './EventosAsistire.css';
+import { obtenerEventosDelUsuario } from '../../services/eventosService';
 
 export const EventosAsistire = async () => {
   const main = document.querySelector('main');
@@ -11,12 +12,7 @@ export const EventosAsistire = async () => {
   }
 
   // Obtener todos los eventos con asistentes
-  const todosLosEventos = obtenerEventosConAsistentes();
-
-  // Filtrar solo los eventos a los que va el usuario actual
-  const eventosGuardados = todosLosEventos.filter((evento) =>
-    evento.asistentes.includes(user.userName)
-  );
+  const eventosGuardados = obtenerEventosDelUsuario();
 
   if (!eventosGuardados.length) {
     main.innerHTML = '<p>No tienes eventos guardados.</p>';
@@ -28,36 +24,6 @@ export const EventosAsistire = async () => {
   main.append(userMessage);
 
   pintarEventos(eventosGuardados, main);
-};
-
-// Agrupa asistentes por evento leyendo todas las claves del localStorage
-const obtenerEventosConAsistentes = () => {
-  const eventosPorId = {};
-
-  for (let i = 0; i < localStorage.length; i++) {
-    const clave = localStorage.key(i);
-
-    if (clave.startsWith('eventosAsistire_')) {
-      const eventosUsuario = JSON.parse(localStorage.getItem(clave)) || [];
-      const userName = clave.replace('eventosAsistire_', '');
-
-      for (const evento of eventosUsuario) {
-        if (!eventosPorId[evento._id]) {
-          eventosPorId[evento._id] = {
-            ...evento,
-            asistentes: new Set()
-          };
-        }
-        eventosPorId[evento._id].asistentes.add(userName);
-      }
-    }
-  }
-
-  // Convertir los sets en arrays
-  return Object.values(eventosPorId).map((evento) => ({
-    ...evento,
-    asistentes: Array.from(evento.asistentes)
-  }));
 };
 
 const pintarEventos = (eventosGuardados, elementoPadre) => {
