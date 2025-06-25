@@ -59,3 +59,31 @@ button {
   cursor: pointer;
   margin: var(--p10-margin-m);
 }
+
+main {
+  min-height: calc(
+    100vh - 100px
+  ); /* Ajusta el 100px según la altura real de header + footer */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+main p {
+  text-align: center;
+  padding: var(--p10-padding-l);
+  width: 100%;
+  font-size: var(--p10-fontsize-m);
+  color: var(--p10-color-text-secondary);
+  margin-bottom: var(--p10-margin-m);
+}
+
+#reloadEvents {
+  background-color: var(--p10-primary);
+  color: var(--p10-letterbotton);
+  padding: var(--p10-padding-s) var(--p10-padding-m);
+  border: none;
+  border-radius: var(--p10-border-radius-m);
+  cursor: pointer;
+}

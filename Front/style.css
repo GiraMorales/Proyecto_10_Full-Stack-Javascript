@@ -8,6 +8,7 @@
 
 body {
   background-color: var(--p10-color-background);
+  overflow-x: hidden;
 }
 
 :root {

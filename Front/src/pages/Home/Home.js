@@ -25,13 +25,19 @@ export const Home = async () => {
     console.log('eventos recibidos:', eventos);
 
     if (!Array.isArray(eventos) || eventos.length === 0) {
-      main.innerHTML = `
+      const contenedorVacio = document.createElement('div');
+      contenedorVacio.classList.add('no-eventos');
+      contenedorVacio.innerHTML = `
         <p>No hay eventos disponibles.</p>
         <button id="reloadEvents">Recargar eventos</button>`;
+
+      // main.appendChild(contenedorVacio);
       document.getElementById('reloadEvents').addEventListener('click', () => {
         Home(); // Llamada para recargar los eventos
       });
       return;
+    } else {
+      console.log('Eventos disponibles:', eventos.length);
     }
 
     // Verificar si el usuario es administrador y mostrar opciones

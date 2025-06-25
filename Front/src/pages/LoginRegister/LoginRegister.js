@@ -12,10 +12,11 @@ export const LoginRegister = () => {
 
   const isLoginPage = !localStorage.getItem('token');
 
-  if (isLoginPage) {
+  if (!localStorage.getItem('token')) {
     Login(container);
   } else {
-    Register(container);
+    Home();
+    Header();
   }
 };
 
@@ -32,6 +33,7 @@ const Login = (elementoPadre) => {
   inputEmail.setAttribute('autocomplete', 'email');
   inputEmail.placeholder = 'email';
   inputPass.placeholder = '*******';
+  button.type = 'submit';
   button.textContent = 'Login';
 
   registerLink.classList.add('registerLink');
@@ -49,6 +51,11 @@ const Login = (elementoPadre) => {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    if (!inputEmail.value || !inputPass.value) {
+      mostrarError(form, 'Todos los campos son obligatorios');
+      return;
+    }
     submitLogin(inputEmail.value, inputPass.value, form);
   });
 };
@@ -70,6 +77,7 @@ const Register = (elementoPadre) => {
   inputEmail.placeholder = 'email';
   inputPass.placeholder = '*******';
   inputUser.placeholder = 'Usuario';
+  button.type = 'submit';
   button.textContent = 'Registrarse';
 
   loginLink.classList.add('registerLink');
@@ -86,6 +94,11 @@ const Register = (elementoPadre) => {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    if (!inputUser.value || !inputEmail.value || !inputPass.value) {
+      mostrarError(form, 'Todos los campos son obligatorios');
+      return;
+    }
     submitRegister(inputUser.value, inputEmail.value, inputPass.value, form);
   });
 };
@@ -133,24 +146,12 @@ const submitLogin = async (email, password, form) => {
 
     console.log('👤 Usuario:', respuestaFinal.user);
 
-    Home();
+    form.reset();
     Header();
   } catch (error) {
     console.error('❌ Error de red o servidor:', error);
     mostrarError(form, 'No se pudo conectar al servidor');
   }
-};
-
-const mostrarError = (form, mensaje) => {
-  const pErrorPrevio = form.querySelector('.error');
-  if (pErrorPrevio) {
-    pErrorPrevio.remove();
-  }
-
-  const pError = document.createElement('p');
-  pError.classList.add('error');
-  pError.textContent = mensaje;
-  form.append(pError);
 };
 
 const submitRegister = async (userName, email, password, form) => {
@@ -189,6 +190,7 @@ const submitRegister = async (userName, email, password, form) => {
     localStorage.setItem('token', respuestaFinal.token);
     localStorage.setItem('user', JSON.stringify(respuestaFinal.user || {}));
 
+    form.reset();
     setTimeout(() => {
       Home();
       Header();
@@ -197,4 +199,14 @@ const submitRegister = async (userName, email, password, form) => {
     console.error('Error al registrar:', error);
     mostrarError(form, 'No se pudo conectar al servidor');
   }
+};
+
+const mostrarError = (form, mensaje) => {
+  const pErrorPrevio = form.querySelector('.error');
+  if (pErrorPrevio) pErrorPrevio.remove();
+
+  const pError = document.createElement('p');
+  pError.classList.add('error');
+  pError.textContent = mensaje;
+  form.append(pError);
 };
