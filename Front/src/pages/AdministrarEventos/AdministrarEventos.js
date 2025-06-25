@@ -77,7 +77,8 @@ export const AdministrarEventos = () => {
       if (!res.ok) throw new Error('Error al crear evento');
 
       alert('Evento creado con éxito');
-      window.location.href = '#/eventos-asistentes';
+
+      formulario.reset();
     } catch (error) {
       console.error('Error:', error);
       alert('Hubo un error al crear el evento');
