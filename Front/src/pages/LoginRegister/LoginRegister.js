@@ -12,11 +12,16 @@ export const LoginRegister = () => {
 
   const isLoginPage = !localStorage.getItem('token');
 
-  if (!localStorage.getItem('token')) {
+  // if (!localStorage.getItem('token')) {
+  //   Login(container);
+  // } else {
+  //   Home();
+  //   Header();
+  // }
+  if (isLoginPage) {
     Login(container);
   } else {
-    Home();
-    Header();
+    Register(container);
   }
 };
 
@@ -147,6 +152,7 @@ const submitLogin = async (email, password, form) => {
     console.log('👤 Usuario:', respuestaFinal.user);
 
     form.reset();
+    Home();
     Header();
   } catch (error) {
     console.error('❌ Error de red o servidor:', error);

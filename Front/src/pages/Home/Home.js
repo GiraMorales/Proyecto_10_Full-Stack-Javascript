@@ -31,7 +31,7 @@ export const Home = async () => {
         <p>No hay eventos disponibles.</p>
         <button id="reloadEvents">Recargar eventos</button>`;
 
-      // main.appendChild(contenedorVacio);
+      main.appendChild(contenedorVacio);
       document.getElementById('reloadEvents').addEventListener('click', () => {
         Home(); // Llamada para recargar los eventos
       });
