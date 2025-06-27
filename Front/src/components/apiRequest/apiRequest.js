@@ -1,34 +1,3 @@
-// // utils/apiRequest.js
-// export const apiRequest = async (
-//   endpoint,
-//   { method = 'GET', data = null } = {}
-// ) => {
-//   const baseUrl = 'http://localhost:3000/api/v1';
-//   const token = localStorage.getItem('token');
-
-//   const headers = {
-//     'Content-Type': 'application/json',
-//     ...(token && { Authorization: `Bearer ${token}` })
-//   };
-
-//   const options = {
-//     method,
-//     headers,
-//     ...(data && { body: JSON.stringify(data) })
-//   };
-
-//   try {
-//     const res = await fetch(`${baseUrl}/${endpoint}`, options);
-//     if (!res.ok) throw new Error(`Error: ${res.status}`);
-//     if (res.status === 204) return null; // No Content
-//     return await res.json();
-//   } catch (err) {
-//     console.error('❌ Error en apiRequest:', err);
-//     throw err;
-//   }
-// };
-
-// utils/apiRequest.js
 export const apiRequest = async (
   endpoint,
   { method = 'GET', data = null } = {}

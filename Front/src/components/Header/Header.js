@@ -50,7 +50,7 @@ export const Header = () => {
         (!user || user.rol !== 'admin')) ||
       (route.texto === 'Administrar Eventos' && (!user || user.rol !== 'admin'))
     ) {
-      return; // No agregar botones no autorizados
+      return;
     }
 
     // 📍 ORGANIZACIÓN POR SECCIÓN

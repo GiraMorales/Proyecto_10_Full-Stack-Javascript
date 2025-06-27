@@ -124,7 +124,7 @@ const actualizarBotonAsistir = (evento, boton) => {
   const eventosGuardados =
     JSON.parse(localStorage.getItem(`eventosAsistire_${user.userName}`)) || [];
   const asistiendo = eventosGuardados.some((e) => e._id === evento._id);
-  boton.textContent = asistiendo ? 'Voy a ir' : 'No voy';
+  boton.textContent = asistiendo ? 'No voy' : 'Voy a ir';
   boton.classList.toggle('activo', asistiendo);
 };
 

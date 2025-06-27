@@ -112,12 +112,9 @@ const submitLogin = async (email, password, form) => {
   }
 
   try {
-    const res = await apiRequest('user/login', {
+    const res = await apiRequest('users/login', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email, password })
+      data: { email, password }
     });
 
     if (res.status === 404) {
@@ -150,8 +147,12 @@ const submitLogin = async (email, password, form) => {
     Home();
     Header();
   } catch (error) {
-    console.error('❌ Error de red o servidor:', error);
-    mostrarError(form, 'No se pudo conectar al servidor');
+    console.error('❌ Error de red o servidor:', error.message);
+    if (error.message.includes('401')) {
+      mostrarError(form, 'Usuario o contraseña incorrectos');
+    } else {
+      mostrarError(form, 'No se pudo conectar al servidor');
+    }
   }
 };
 
@@ -164,12 +165,9 @@ const submitRegister = async (userName, email, password, form) => {
   }
 
   try {
-    const res = await apiRequest('user/register', {
+    const res = await apiRequest('users/register', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ userName, email, password })
+      data: { userName, email, password }
     });
 
     const respuestaFinal = await res.json();
