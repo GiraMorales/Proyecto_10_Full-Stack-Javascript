@@ -1,3 +1,4 @@
+import { apiRequest } from '../../components/apiRequest/apiRequest';
 import { Header } from '../../components/Header/Header';
 import './Home.css';
 
@@ -12,16 +13,10 @@ export const Home = async () => {
   Header(); // Llamada a Header para que se ejecute al cargar la página
 
   try {
-    const token = localStorage.getItem('token');
-    const headers = token ? { Authorization: `Bearer ${token}` } : {};
-
-    const res = await fetch('http://localhost:3000/api/v1/eventos', {
-      headers
-    });
-
-    if (!res.ok) throw new Error(`❌ Error en la solicitud: ${res.status}`);
-
-    const eventos = await res.json();
+    const eventos = await apiRequest('eventos');
+    if (!eventos || !Array.isArray(eventos)) {
+      throw new Error('❌ Respuesta inválida del servidor: no es un array');
+    }
     console.log('eventos recibidos:', eventos);
 
     if (!Array.isArray(eventos) || eventos.length === 0) {

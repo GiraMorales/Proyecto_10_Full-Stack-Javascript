@@ -1,3 +1,4 @@
+import { apiRequest } from '../../components/apiRequest/apiRequest';
 import { Header } from '../../components/Header/Header';
 import { Home } from '../Home/Home';
 import './LoginRegister.css';
@@ -12,12 +13,6 @@ export const LoginRegister = () => {
 
   const isLoginPage = !localStorage.getItem('token');
 
-  // if (!localStorage.getItem('token')) {
-  //   Login(container);
-  // } else {
-  //   Home();
-  //   Header();
-  // }
   if (isLoginPage) {
     Login(container);
   } else {
@@ -117,7 +112,7 @@ const submitLogin = async (email, password, form) => {
   }
 
   try {
-    const res = await fetch('http://localhost:3000/api/v1/users/login', {
+    const res = await apiRequest('user/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -169,7 +164,7 @@ const submitRegister = async (userName, email, password, form) => {
   }
 
   try {
-    const res = await fetch('http://localhost:3000/api/v1/users/register', {
+    const res = await apiRequest('user/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

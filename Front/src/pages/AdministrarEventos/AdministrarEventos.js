@@ -1,3 +1,4 @@
+import { apiRequest } from '../../components/apiRequest/apiRequest';
 import './AdministrarEventos.css';
 
 export const AdministrarEventos = () => {
@@ -65,16 +66,18 @@ export const AdministrarEventos = () => {
       ubicacion: document.getElementById('ubicacion').value
     };
     try {
-      const res = await fetch('http://localhost:3000/api/v1/eventos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(evento)
-      });
+      // const res = await fetch('http://localhost:3000/api/v1/eventos', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     Authorization: `Bearer ${localStorage.getItem('token')}`
+      //   },
+      //   body: JSON.stringify(evento)
+      // });
 
-      if (!res.ok) throw new Error('Error al crear evento');
+      await apiRequest('eventos', { method: 'POST', data: evento });
+
+      if (!apiRequest.ok) throw new Error('Error al crear evento');
 
       alert('Evento creado con éxito');
 
@@ -93,13 +96,13 @@ export const AdministrarEventos = () => {
       '<h2 class="titulo-eliminar-evento">Eliminar Eventos</h2>'; // Limpiar contenido previo
 
     try {
-      const res = await fetch('http://localhost:3000/api/v1/eventos', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      });
+      // const res = await fetch('http://localhost:3000/api/v1/eventos', {
+      //   headers: {
+      //     Authorization: `Bearer ${localStorage.getItem('token')}`
+      //   }
+      // });
 
-      const eventos = await res.json();
+      const eventos = await apiRequest('eventos');
       if (!Array.isArray(eventos) || eventos.length === 0) {
         contenedor.innerHTML += '<p>No hay eventos disponibles.</p>';
         return;
@@ -121,17 +124,18 @@ export const AdministrarEventos = () => {
           if (!confirmar) return;
 
           try {
-            const res = await fetch(
-              `http://localhost:3000/api/v1/eventos/${evento._id}`,
-              {
-                method: 'DELETE',
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-              }
-            );
+            // const res = await fetch(
+            //   `http://localhost:3000/api/v1/eventos/${evento._id}`,
+            //   {
+            //     method: 'DELETE',
+            //     headers: {
+            //       Authorization: `Bearer ${localStorage.getItem('token')}`
+            //     }
+            //   }
+            // );
+            await apiRequest(`eventos/${evento._id}`, { method: 'DELETE' });
 
-            if (!res.ok) throw new Error('Error al eliminar el evento');
+            if (!apiRequest.ok) throw new Error('Error al eliminar el evento');
             alert('✅ Evento eliminado');
             cargarEventosParaEliminar(contenedor);
           } catch (err) {
