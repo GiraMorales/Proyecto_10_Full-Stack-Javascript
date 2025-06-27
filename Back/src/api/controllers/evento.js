@@ -1,5 +1,5 @@
 const { deleteFile } = require('../../utils/deleteFile');
-const { Evento } = require('../models/evento');
+const Evento = require('../models/evento');
 
 const getEventos = async (req, res, next) => {
   try {
@@ -82,10 +82,56 @@ const deleteEvento = async (req, res, next) => {
   }
 };
 
+asistirEvento = async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const userId = req.user._id; // viene del middleware de auth
+
+    const evento = await Evento.findById(eventId);
+    if (!evento)
+      return res.status(404).json({ message: 'Evento no encontrado' });
+
+    if (evento.asistentes.includes(userId)) {
+      return res
+        .status(400)
+        .json({ message: 'Ya estás apuntado a este evento' });
+    }
+
+    evento.asistentes.push(userId);
+    await evento.save();
+
+    res.json({ message: 'Asistencia registrada correctamente' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error del servidor' });
+  }
+};
+
+cancelarAsistenciaEvento = async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const userId = req.user._id;
+
+    const evento = await Evento.findById(eventId);
+    if (!evento)
+      return res.status(404).json({ message: 'Evento no encontrado' });
+
+    evento.asistentes = evento.asistentes.filter(
+      (id) => id.toString() !== userId.toString()
+    );
+    await evento.save();
+
+    res.json({ message: 'Asistencia cancelada correctamente' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error del servidor' });
+  }
+};
+
 module.exports = {
   getEventos,
   getEventoById,
   postEvento,
   updateEvento,
-  deleteEvento
+  deleteEvento,
+  asistirEvento,
+  cancelarAsistenciaEvento
 };

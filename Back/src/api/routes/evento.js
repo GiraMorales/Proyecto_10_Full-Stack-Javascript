@@ -25,5 +25,7 @@ eventosRouter.post(
 );
 eventosRouter.put('/:id', [isAdmin], updateEvento);
 eventosRouter.delete('/:id', [isAdmin], deleteEvento);
+eventosRouter.post('asistir/:id', [isAuth], asistirEvento);
+eventosRouter.post('cancelar-asistir/:id', [isAuth], cancelarAsistenciaEvento);
 
 module.exports = eventosRouter;

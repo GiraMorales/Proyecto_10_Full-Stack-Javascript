@@ -9,7 +9,8 @@ const eventoSchema = new mongoose.Schema(
     descripcion: { type: String, required: false },
     relatedUsers: [
       { type: mongoose.Types.ObjectId, required: false, ref: 'users' }
-    ]
+    ],
+    asistentes: [{ type: mongoose.Types.ObjectId, ref: 'users' }]
   },
   {
     timestamps: true,
@@ -18,4 +19,4 @@ const eventoSchema = new mongoose.Schema(
 );
 
 const Evento = mongoose.model('eventos', eventoSchema, 'eventos');
-module.exports = { Evento };
+module.exports = Evento;

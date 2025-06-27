@@ -1,5 +1,9 @@
 import './EventosAsistire.css';
 import { obtenerEventosDelUsuario } from '../../services/eventosService';
+import {
+  asistirEventoAPI,
+  cancelarAsistenciaEventoAPI
+} from '../../components/apiAsistencia/apiAsistencia';
 
 export const EventosAsistire = async () => {
   const main = document.querySelector('main');
@@ -57,14 +61,13 @@ const pintarEventos = (eventosGuardados, elementoPadre) => {
   }
 };
 
-const toggleEventoAsistire = (evento) => {
+const toggleEventoAsistire = async (evento) => {
   if (!evento || !evento._id) {
     console.error('El evento no es válido:', evento);
     return;
   }
 
   const user = JSON.parse(localStorage.getItem('user'));
-
   if (!user || !user.userName) {
     console.warn('❌ Usuario no válido o no logueado.');
     return;
@@ -75,24 +78,34 @@ const toggleEventoAsistire = (evento) => {
 
   const eventoIndex = eventosUsuario.findIndex((e) => e._id === evento._id);
 
-  if (eventoIndex !== -1) {
-    // Si el evento ya está guardado, quitarlo
-    eventosUsuario.splice(eventoIndex, 1);
-  } else {
-    // Si no está guardado, agregarlo
-    eventosUsuario.push({
-      _id: evento._id,
-      titulo: evento.titulo,
-      portada: evento.portada,
-      fecha: evento.fecha,
-      ubicacion: evento.ubicacion
-    });
-  }
+  try {
+    if (eventoIndex !== -1) {
+      // Evento ya guardado: quitar asistencia en backend
+      await cancelarAsistenciaEventoAPI(evento._id);
+      // Quitar localmente
+      eventosUsuario.splice(eventoIndex, 1);
+      alert(`Has cancelado tu asistencia al evento "${evento.titulo}"`);
+    } else {
+      // Evento no guardado: añadir asistencia en backend
+      await asistirEventoAPI(evento._id);
+      // Agregar localmente
+      eventosUsuario.push({
+        _id: evento._id,
+        titulo: evento.titulo,
+        portada: evento.portada,
+        fecha: evento.fecha,
+        ubicacion: evento.ubicacion
+      });
+      alert(`Te has apuntado al evento "${evento.titulo}"`);
+    }
 
-  // Si quedan eventos, guardar la lista; si no, eliminar la clave
-  if (eventosUsuario.length > 0) {
-    localStorage.setItem(claveUsuario, JSON.stringify(eventosUsuario));
-  } else {
-    localStorage.removeItem(claveUsuario);
+    if (eventosUsuario.length > 0) {
+      localStorage.setItem(claveUsuario, JSON.stringify(eventosUsuario));
+    } else {
+      localStorage.removeItem(claveUsuario);
+    }
+  } catch (error) {
+    console.error('Error actualizando asistencia en backend:', error);
+    alert('Error al actualizar tu asistencia. Intenta más tarde.');
   }
 };
