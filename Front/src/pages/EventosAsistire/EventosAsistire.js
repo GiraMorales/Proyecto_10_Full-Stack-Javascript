@@ -3,7 +3,7 @@ import { obtenerEventosDelUsuario } from '../../services/eventosService';
 import {
   asistirEventoAPI,
   cancelarAsistenciaEventoAPI
-} from '../../components/apiAsistencia/apiAsistencia';
+} from '../../Utils/apiAsistencia';
 
 export const EventosAsistire = async () => {
   const main = document.querySelector('main');

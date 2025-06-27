@@ -1,4 +1,4 @@
-import { apiRequest } from '../../components/apiRequest/apiRequest';
+import { apiRequest } from '../../Utils/apiRequest';
 import './AdministrarEventos.css';
 
 export const AdministrarEventos = () => {

@@ -4,8 +4,10 @@ main > h3 {
   justify-content: center;
   margin-top: var(--p10-margin-xl);
   color: var(--p10-color-text-secondary);
-  width: 100%;
+  width: 96%;
   align-items: center;
+  top: 190px;
+  position: sticky;
 }
 
 h2 {

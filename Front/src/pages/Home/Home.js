@@ -1,4 +1,4 @@
-import { apiRequest } from '../../components/apiRequest/apiRequest';
+import { apiRequest } from '../../Utils/apiRequest';
 import { Header } from '../../components/Header/Header';
 import './Home.css';
 
