@@ -124,15 +124,6 @@ export const AdministrarEventos = () => {
           if (!confirmar) return;
 
           try {
-            // const res = await fetch(
-            //   `http://localhost:3000/api/v1/eventos/${evento._id}`,
-            //   {
-            //     method: 'DELETE',
-            //     headers: {
-            //       Authorization: `Bearer ${localStorage.getItem('token')}`
-            //     }
-            //   }
-            // );
             await apiRequest(`eventos/${evento._id}`, { method: 'DELETE' });
 
             if (!apiRequest.ok) throw new Error('Error al eliminar el evento');

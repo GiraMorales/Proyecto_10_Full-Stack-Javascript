@@ -102,6 +102,13 @@ const pintarEventos = (eventos, elementoPadre) => {
       actualizarBotonAsistir(evento, btnAsistir);
 
       btnAsistir.addEventListener('click', () => {
+        alert(
+          `Has ${
+            btnAsistir.classList.contains('activo')
+              ? 'dejado de asistir'
+              : 'confirmado tu asistencia'
+          } al evento "${evento.titulo}"`
+        );
         toggleEventoAsistire(evento);
         actualizarBotonAsistir(evento, btnAsistir);
       });
@@ -124,6 +131,7 @@ const actualizarBotonAsistir = (evento, boton) => {
   const eventosGuardados =
     JSON.parse(localStorage.getItem(`eventosAsistire_${user.userName}`)) || [];
   const asistiendo = eventosGuardados.some((e) => e._id === evento._id);
+
   boton.textContent = asistiendo ? 'No voy' : 'Voy a ir';
   boton.classList.toggle('activo', asistiendo);
 };

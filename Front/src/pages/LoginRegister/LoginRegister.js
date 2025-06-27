@@ -122,12 +122,10 @@ const submitLogin = async (email, password, form) => {
       return;
     }
 
-    if (!res.ok) {
-      mostrarError(form, 'Error al conectar con el servidor');
-      return;
-    }
-
-    const respuestaFinal = await res.json();
+    const respuestaFinal = await apiRequest('users/login', {
+      method: 'POST',
+      data: { email, password }
+    });
     console.log('🔐 Login exitoso:', respuestaFinal);
 
     if (!respuestaFinal.token || !respuestaFinal.user) {
@@ -148,11 +146,6 @@ const submitLogin = async (email, password, form) => {
     Header();
   } catch (error) {
     console.error('❌ Error de red o servidor:', error.message);
-    if (error.message.includes('401')) {
-      mostrarError(form, 'Usuario o contraseña incorrectos');
-    } else {
-      mostrarError(form, 'No se pudo conectar al servidor');
-    }
   }
 };
 
@@ -170,7 +163,10 @@ const submitRegister = async (userName, email, password, form) => {
       data: { userName, email, password }
     });
 
-    const respuestaFinal = await res.json();
+    const respuestaFinal = await apiRequest('users/login', {
+      method: 'POST',
+      data: { email, password }
+    });
     console.log('Respuesta del servidor:', respuestaFinal);
 
     if (res.status === 400) {
