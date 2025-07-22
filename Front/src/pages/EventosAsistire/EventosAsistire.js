@@ -1,5 +1,5 @@
 import './EventosAsistire.css';
-import { obtenerEventosDelUsuario } from '../../services/eventosService';
+import { obtenerEventos } from '../../services/eventosService';
 import {
   asistirEventoAPI,
   cancelarAsistenciaEventoAPI
@@ -10,28 +10,40 @@ export const EventosAsistire = async () => {
   main.innerHTML = '';
 
   const user = JSON.parse(localStorage.getItem('user'));
-  if (!user || !user.userName) {
+  if (!user || !user._id) {
     main.innerHTML = '<p>Debes iniciar sesión para ver tus eventos.</p>';
     return;
   }
 
-  // Obtener todos los eventos con asistentes
-  const eventosGuardados = obtenerEventosDelUsuario();
+  const eventosGuardados = await obtenerEventos();
 
-  if (!eventosGuardados.length) {
-    main.innerHTML = '<p>No tienes eventos guardados.</p>';
-    return;
-  }
+  const eventosDelUsuario = eventosGuardados.filter((evento) =>
+    evento.asistentes.some((asistente) => {
+      // Asistente puede ser ObjectId, string o un objeto con _id
+      if (!asistente) return false;
+      if (typeof asistente === 'string') {
+        return asistente === user._id;
+      }
+      if (typeof asistente === 'object') {
+        if (asistente._id) {
+          return asistente._id.toString() === user._id.toString();
+        }
+        // En caso asistente sea ObjectId (no string)
+        return asistente.toString() === user._id.toString();
+      }
+      return false;
+    })
+  );
 
   const userMessage = document.createElement('h3');
   userMessage.textContent = `Hola, ${user.userName}. Aquí tienes tus eventos:`;
   main.append(userMessage);
 
-  pintarEventos(eventosGuardados, main);
+  pintarEventos(eventosDelUsuario, main);
 };
 
-const pintarEventos = (eventosGuardados, elementoPadre) => {
-  for (const evento of eventosGuardados) {
+const pintarEventos = (eventosDelUsuario, elementoPadre) => {
+  for (const evento of eventosDelUsuario) {
     const divEvento = document.createElement('div');
     divEvento.classList.add('evento');
 
@@ -51,10 +63,28 @@ const pintarEventos = (eventosGuardados, elementoPadre) => {
 
     const asistentesLista = document.createElement('ul');
     asistentesLista.classList.add('asistentes');
-    asistentesLista.innerHTML =
-      evento.asistentes.length > 0
-        ? evento.asistentes.map((asistente) => `<li>${asistente}</li>`).join('')
-        : '<li>Aún no hay asistentes.</li>';
+
+    if (evento.asistentes && evento.asistentes.length > 0) {
+      asistentesLista.innerHTML =
+        evento.asistentes.length > 0
+          ? evento.asistentes
+              .map((asistente) => {
+                if (!asistente) return '';
+                if (typeof asistente === 'string')
+                  return `<li>${asistente}</li>`;
+                if (typeof asistente === 'object') {
+                  return `<li>${
+                    asistente.userName ||
+                    asistente.email ||
+                    asistente._id ||
+                    'Sin nombre'
+                  }</li>`;
+                }
+                return '';
+              })
+              .join('')
+          : '<li>Aún no hay asistentes.</li>';
+    }
 
     divEvento.append(h2, imagen, p, tituloAsistentes, asistentesLista);
     elementoPadre.append(divEvento);
@@ -68,42 +98,27 @@ const toggleEventoAsistire = async (evento) => {
   }
 
   const user = JSON.parse(localStorage.getItem('user'));
-  if (!user || !user.userName) {
+  if (!user || !user._id) {
     console.warn('❌ Usuario no válido o no logueado.');
     return;
   }
 
-  const claveUsuario = `eventosAsistire_${user.userName}`;
-  let eventosUsuario = JSON.parse(localStorage.getItem(claveUsuario)) || [];
-
-  const eventoIndex = eventosUsuario.findIndex((e) => e._id === evento._id);
-
   try {
-    if (eventoIndex !== -1) {
-      // Evento ya guardado: quitar asistencia en backend
+    const yaEstoyApuntado = evento.asistentes?.some(
+      (asistente) =>
+        (typeof asistente === 'string' && asistente === user._id) ||
+        (asistente._id && asistente._id === user._id)
+    );
+
+    if (yaEstoyApuntado) {
       await cancelarAsistenciaEventoAPI(evento._id);
-      // Quitar localmente
-      eventosUsuario.splice(eventoIndex, 1);
       alert(`Has cancelado tu asistencia al evento "${evento.titulo}"`);
     } else {
-      // Evento no guardado: añadir asistencia en backend
       await asistirEventoAPI(evento._id);
-      // Agregar localmente
-      eventosUsuario.push({
-        _id: evento._id,
-        titulo: evento.titulo,
-        portada: evento.portada,
-        fecha: evento.fecha,
-        ubicacion: evento.ubicacion
-      });
       alert(`Te has apuntado al evento "${evento.titulo}"`);
     }
 
-    if (eventosUsuario.length > 0) {
-      localStorage.setItem(claveUsuario, JSON.stringify(eventosUsuario));
-    } else {
-      localStorage.removeItem(claveUsuario);
-    }
+    EventosAsistire();
   } catch (error) {
     console.error('Error actualizando asistencia en backend:', error);
     alert('Error al actualizar tu asistencia. Intenta más tarde.');

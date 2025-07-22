@@ -1,63 +1,60 @@
-export const obtenerEventosConAsistentes = () => {
-  const eventosPorId = {};
-
-  for (let i = 0; i < localStorage.length; i++) {
-    const clave = localStorage.key(i);
-
-    if (clave.startsWith('eventosAsistire_')) {
-      const eventosUsuario = JSON.parse(localStorage.getItem(clave)) || [];
-      const userName = clave.replace('eventosAsistire_', '');
-
-      for (const evento of eventosUsuario) {
-        if (!eventosPorId[evento._id]) {
-          eventosPorId[evento._id] = {
-            ...evento,
-            asistentes: new Set()
-          };
-        }
-        eventosPorId[evento._id].asistentes.add(userName);
-      }
-    }
-  }
-
-  return Object.values(eventosPorId).map((evento) => ({
-    ...evento,
-    asistentes: Array.from(evento.asistentes)
-  }));
+export const obtenerEventos = async () => {
+  const response = await fetch('http://localhost:3000/api/v1/eventos');
+  if (!response.ok) throw new Error('No se pudieron cargar los eventos');
+  return await response.json();
 };
 
-export const obtenerEventosDelUsuario = () => {
+export const obtenerEventosDelUsuario = async () => {
+  const eventos = await obtenerEventos();
   const user = JSON.parse(localStorage.getItem('user'));
+  if (!user) return [];
 
-  if (!user || !user.userName) return [];
-
-  const clave = `eventosAsistire_${user.userName}`;
-  return JSON.parse(localStorage.getItem(clave)) || [];
+  return eventos.filter((evento) =>
+    evento.relatedUsers.some(
+      (userId) => userId === user._id || userId._id === user._id
+    )
+  );
 };
 
-export const toggleEventoAsistire = (evento, userName) => {
-  if (!evento || !evento._id || !userName) return;
+export const toggleEventoAsistire = async (evento, userName) => {
+  if (!evento || !evento._id || !userName) return null;
 
-  const claveUsuario = `eventosAsistire_${userName}`;
-  let eventosUsuario = JSON.parse(localStorage.getItem(claveUsuario)) || [];
-
-  const index = eventosUsuario.findIndex((e) => e._id === evento._id);
-
-  if (index !== -1) {
-    eventosUsuario.splice(index, 1);
-  } else {
-    eventosUsuario.push({
-      _id: evento._id,
-      titulo: evento.titulo,
-      portada: evento.portada,
-      fecha: evento.fecha,
-      ubicacion: evento.ubicacion
-    });
+  const token = localStorage.getItem('token');
+  if (!token) {
+    alert('Debes iniciar sesión para apuntarte a eventos.');
+    return null;
   }
 
-  if (eventosUsuario.length > 0) {
-    localStorage.setItem(claveUsuario, JSON.stringify(eventosUsuario));
-  } else {
-    localStorage.removeItem(claveUsuario);
+  const yaEstoyApuntado = evento.relatedUsers?.some(
+    (user) => user._id === userName || user === userName
+  );
+
+  const url = yaEstoyApuntado
+    ? `http://localhost:3000/api/v1/eventos/cancelar-asistir/${evento._id}`
+    : `http://localhost:3000/api/v1/eventos/asistir/${evento._id}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) throw new Error('Error al cambiar asistencia');
+
+    const data = await response.json();
+
+    alert(
+      yaEstoyApuntado
+        ? 'Has cancelado tu asistencia al evento'
+        : 'Te has apuntado al evento'
+    );
+
+    return data.evento; // <- Devolvemos el evento actualizado
+  } catch (error) {
+    console.error('Error en toggleEventoAsistire:', error);
+    alert('Error al cambiar tu estado de asistencia');
+    return null;
   }
 };

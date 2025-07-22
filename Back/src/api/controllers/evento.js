@@ -4,14 +4,16 @@ const Evento = require('../models/evento');
 const getEventos = async (req, res, next) => {
   try {
     const eventos = await Evento.find().populate(
-      'relatedUsers',
+      'asistentes',
       'userName email'
     );
     return res.status(200).json(eventos);
   } catch (error) {
+    console.error('Error en getEventos:', error);
     return res.status(400).json('error al buscar los eventos');
   }
 };
+
 const getEventoById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -91,7 +93,7 @@ asistirEvento = async (req, res) => {
     if (!evento)
       return res.status(404).json({ message: 'Evento no encontrado' });
 
-    if (evento.asistentes.includes(userId)) {
+    if (evento.asistentes.some((id) => id.toString() === userId.toString())) {
       return res
         .status(400)
         .json({ message: 'Ya estás apuntado a este evento' });

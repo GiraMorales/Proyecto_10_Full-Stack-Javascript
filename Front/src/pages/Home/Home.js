@@ -1,3 +1,7 @@
+import {
+  asistirEventoAPI,
+  cancelarAsistenciaEventoAPI
+} from '../../Utils/apiAsistencia';
 import { apiRequest } from '../../Utils/apiRequest';
 import { Header } from '../../components/Header/Header';
 import './Home.css';
@@ -10,74 +14,48 @@ export const Home = async () => {
   }
 
   main.innerHTML = '';
-  Header(); // Llamada a Header para que se ejecute al cargar la página
+  Header();
 
   try {
     const eventos = await apiRequest('eventos');
     if (!eventos || !Array.isArray(eventos)) {
       throw new Error('❌ Respuesta inválida del servidor: no es un array');
     }
-    console.log('eventos recibidos:', eventos);
 
-    if (!Array.isArray(eventos) || eventos.length === 0) {
-      const contenedorVacio = document.createElement('div');
-      contenedorVacio.classList.add('no-eventos');
-      contenedorVacio.innerHTML = `
-        <p>No hay eventos disponibles.</p>
-        <button id="reloadEvents">Recargar eventos</button>`;
-
-      main.appendChild(contenedorVacio);
-      document.getElementById('reloadEvents').addEventListener('click', () => {
-        Home(); // Llamada para recargar los eventos
-      });
+    if (eventos.length === 0) {
+      main.innerHTML = `
+        <div class="no-eventos">
+          <p>No hay eventos disponibles.</p>
+          <button id="reloadEvents">Recargar eventos</button>
+        </div>
+      `;
+      document.getElementById('reloadEvents').addEventListener('click', Home);
       return;
-    } else {
-      console.log('Eventos disponibles:', eventos.length);
     }
 
-    // Verificar si el usuario es administrador y mostrar opciones
     const user = JSON.parse(localStorage.getItem('user'));
-    if (user && user.rol === 'admin') {
-      // Aquí podrías mostrar botones extra para admins
-    }
+    const eventosApuntados = user
+      ? await apiRequest(`users/${user._id}/eventos`)
+      : [];
 
-    pintarEventos(eventos, main);
+    pintarEventos(eventos, eventosApuntados, main);
   } catch (error) {
     console.error('❌ Error al obtener eventos:', error);
     main.innerHTML = `<p>Error al cargar los eventos: ${error.message}</p>`;
   }
 };
 
-const pintarEventos = (eventos, elementoPadre) => {
-  console.log('✅ Ejecutando pintarEventos()', eventos);
-
-  const token = localStorage.getItem('token'); // Verificar si el usuario está autenticado
-  const eventosGuardados =
-    JSON.parse(localStorage.getItem('eventosAsistire')) || [];
-  console.log('eventosGuardados:', eventosGuardados);
+const pintarEventos = (eventos, eventosApuntados, elementoPadre) => {
+  const token = localStorage.getItem('token');
 
   for (const evento of eventos) {
-    if (
-      !evento.titulo ||
-      !evento.portada ||
-      !evento.descripcion ||
-      !evento._id
-    ) {
-      console.warn('❌ Evento inválido:', evento);
-      continue;
-    }
+    if (!evento._id || !evento.titulo || !evento.portada) continue;
 
     const divEvento = document.createElement('div');
     divEvento.classList.add('evento');
 
-    const divTitulo = document.createElement('div');
-    divTitulo.classList.add('evento-titulo');
     const h2 = document.createElement('h2');
     h2.textContent = evento.titulo;
-    divTitulo.appendChild(h2);
-
-    const divDescripcion = document.createElement('div');
-    divDescripcion.classList.add('evento-descripcion');
 
     const imagen = document.createElement('img');
     imagen.src = evento.portada;
@@ -85,11 +63,9 @@ const pintarEventos = (eventos, elementoPadre) => {
 
     const p = document.createElement('p');
     p.textContent = evento.descripcion;
-    divDescripcion.append(imagen, p);
 
-    const divInfo = document.createElement('div');
-    divInfo.classList.add('evento-info');
-    divInfo.innerHTML = `
+    const info = document.createElement('div');
+    info.innerHTML = `
       <p><strong>Fecha:</strong> ${evento.fecha}</p>
       <p><strong>Ubicación:</strong> ${evento.ubicacion}</p>
     `;
@@ -99,76 +75,29 @@ const pintarEventos = (eventos, elementoPadre) => {
 
     if (token) {
       const btnAsistir = document.createElement('button');
-      actualizarBotonAsistir(evento, btnAsistir);
+      const asistiendo = eventosApuntados.some((e) => e._id === evento._id);
 
-      btnAsistir.addEventListener('click', () => {
-        alert(
-          `Has ${
-            btnAsistir.classList.contains('activo')
-              ? 'dejado de asistir'
-              : 'confirmado tu asistencia'
-          } al evento "${evento.titulo}"`
-        );
-        toggleEventoAsistire(evento);
-        actualizarBotonAsistir(evento, btnAsistir);
+      btnAsistir.textContent = asistiendo ? 'No voy' : 'Voy a ir';
+      btnAsistir.classList.toggle('activo', asistiendo);
+
+      btnAsistir.addEventListener('click', async () => {
+        try {
+          if (btnAsistir.classList.contains('activo')) {
+            await cancelarAsistenciaEventoAPI(evento._id);
+          } else {
+            await asistirEventoAPI(evento._id);
+          }
+          await Home(); // recargar eventos actualizados
+        } catch (error) {
+          console.error('Error al actualizar asistencia:', error);
+          alert('Error al actualizar tu asistencia. Intenta más tarde.');
+        }
       });
 
       divBoton.appendChild(btnAsistir);
     }
 
-    divEvento.append(divTitulo, divDescripcion, divInfo, divBoton);
-    elementoPadre.append(divEvento);
+    divEvento.append(h2, imagen, p, info, divBoton);
+    elementoPadre.appendChild(divEvento);
   }
-
-  const divEvento = document.createElement('div');
-  divEvento.classList.add('evento');
-};
-
-const actualizarBotonAsistir = (evento, boton) => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  if (!user || !user.userName) return;
-
-  const eventosGuardados =
-    JSON.parse(localStorage.getItem(`eventosAsistire_${user.userName}`)) || [];
-  const asistiendo = eventosGuardados.some((e) => e._id === evento._id);
-
-  boton.textContent = asistiendo ? 'No voy' : 'Voy a ir';
-  boton.classList.toggle('activo', asistiendo);
-};
-
-const toggleEventoAsistire = (evento) => {
-  if (!evento || !evento._id) {
-    console.error('El evento no es válido:', evento);
-    return;
-  }
-
-  const user = JSON.parse(localStorage.getItem('user'));
-  if (!user || !user.userName) {
-    console.warn('❌ Usuario no válido o no logueado.');
-    return;
-  }
-
-  const key = `eventosAsistire_${user.userName}`;
-  let eventosAsistire = JSON.parse(localStorage.getItem(key)) || [];
-
-  const eventoIndex = eventosAsistire.findIndex((e) => e._id === evento._id);
-
-  if (eventoIndex !== -1) {
-    eventosAsistire.splice(eventoIndex, 1);
-  } else {
-    eventosAsistire.push({
-      _id: evento._id,
-      titulo: evento.titulo,
-      portada: evento.portada,
-      fecha: evento.fecha,
-      ubicacion: evento.ubicacion,
-      asistentes: [user.userName]
-    });
-  }
-
-  localStorage.setItem(key, JSON.stringify(eventosAsistire));
-  console.log(
-    `✅ Evento actualizado en localStorage para ${user.userName}:`,
-    eventosAsistire
-  );
 };

@@ -7,9 +7,7 @@ const eventoSchema = new mongoose.Schema(
     fecha: { type: String, required: true },
     ubicacion: { type: String, required: true },
     descripcion: { type: String, required: false },
-    relatedUsers: [
-      { type: mongoose.Types.ObjectId, required: false, ref: 'users' }
-    ],
+
     asistentes: [{ type: mongoose.Types.ObjectId, ref: 'users' }]
   },
   {

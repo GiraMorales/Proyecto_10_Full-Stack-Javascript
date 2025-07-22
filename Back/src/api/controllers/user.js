@@ -1,6 +1,7 @@
 const { generateSing } = require('../../utils/jwt');
 const { User } = require('../models/user');
 const bcrypt = require('bcrypt');
+const Evento = require('../models/evento');
 
 const getUsers = async (req, res, next) => {
   try {
@@ -18,6 +19,19 @@ const getUserById = async (req, res, next) => {
     return res.status(200).json(user);
   } catch (error) {
     return res.status(400).json('error al buscar un usuario');
+  }
+};
+
+const getEventosDeUsuario = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const eventos = await Evento.find({ asistentes: id });
+    return res.status(200).json(eventos);
+  } catch (error) {
+    console.error('Error al obtener eventos del usuario:', error);
+    return res
+      .status(500)
+      .json({ message: 'Error al obtener eventos del usuario' });
   }
 };
 
@@ -62,6 +76,7 @@ const login = async (req, res, next) => {
     return res.status(200).json({
       token,
       user: {
+        _id: user._id,
         userName: user.userName,
         email: user.email,
         rol: user.rol
@@ -108,6 +123,7 @@ const deleteUser = async (req, res, next) => {
 module.exports = {
   getUsers,
   getUserById,
+  getEventosDeUsuario,
   register,
   login,
   updateUser,
