@@ -19,7 +19,6 @@ h2 {
 
 .evento p {
   font-size: var(--p10-fontsize-s);
-  margin: var(--p10-margin-m);
 }
 
 .evento h4 {
@@ -37,4 +36,10 @@ h2 {
 .asistentes li {
   font-size: var(--p10-fontsize-s);
   color: var(--p10-color-text-secondary);
+}
+@media screen and (max-width: 400px) {
+  .evento p {
+    font-size: var(--p10-fontsize-xs);
+    margin: -3%;
+  }
 }

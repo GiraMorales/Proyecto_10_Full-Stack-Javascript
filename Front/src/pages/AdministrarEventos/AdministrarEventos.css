@@ -92,6 +92,4 @@ h3 {
   background-color: var(--p10-color-background);
   width: 100%;
   padding: var(--p10-padding-xl);
-  margin: var(--p10-margin-m);
-  margin-left: -50px;
 }

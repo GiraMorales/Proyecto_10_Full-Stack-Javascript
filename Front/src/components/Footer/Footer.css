@@ -1,7 +1,7 @@
 footer {
   display: flex;
   margin-bottom: 0;
-  width: 100%;
+  width: 96%;
   height: 10svh;
   box-shadow: var(--p10-shadow);
   background-color: var(--p10-color-background-secondary);
@@ -9,6 +9,8 @@ footer {
   align-items: center;
   justify-content: center;
   margin-top: var(--p10-margin-l);
+  margin-left: 2%;
+  margin-bottom: 2%;
 }
 
 .titulo-footer {
@@ -16,4 +18,11 @@ footer {
   margin-top: var(--p10-margin-s);
   width: 50%;
   background-color: var(--p10-color-background-secondary);
+}
+
+@media screen and (max-width: 400px) {
+  .titulo-footer {
+    font-size: var(--p10-fontsize-s);
+    width: 100%;
+  }
 }

@@ -2,8 +2,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: var(--p10-margin-m);
   justify-content: center;
+  width: 100%;
 }
 .evento-titulo,
 .evento-descripcion {
@@ -43,7 +43,6 @@ img {
   width: 100%;
   text-align: center;
   margin: var(--p10-margin-m);
-  margin-left: var(--p10-margin-xl);
   color: var(--p10-letterError);
   font-size: var(--p10-fontsize-s);
 }
@@ -65,13 +64,57 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 2%;
+}
+
+.info {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
 }
 
 main p {
   text-align: center;
   padding: var(--p10-padding-l);
-  width: 100%;
+  width: 45%;
   font-size: var(--p10-fontsize-m);
   color: var(--p10-color-text-secondary);
-  margin-bottom: var(--p10-margin-m);
+}
+
+@media screen and (max-width: 1000px) {
+  img {
+    width: 500px;
+    height: 250px;
+  }
+  .evento-descripcion p {
+    font-size: var(--p10-fontsize-s);
+  }
+}
+
+@media screen and (max-width: 700px) {
+  img {
+    width: 400px;
+  }
+  .evento-descripcion p {
+    font-size: var(--p10-fontsize-xs);
+  }
+  h2 {
+    height: 80px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  img {
+    width: 200px;
+    height: 150px;
+  }
+  .evento-descripcion p {
+    font-size: var(--p10-fontsize-xxs);
+  }
+
+  h2 {
+    height: 70px;
+    font-size: var(--p10-fontsize-s);
+  }
 }

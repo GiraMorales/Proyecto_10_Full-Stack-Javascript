@@ -1,11 +1,10 @@
 header {
-  justify-content: center;
-  width: 98%;
+  width: 95%;
   position: sticky;
-  top: 12px;
+  top: 10px;
   height: 12svh;
   box-shadow: var(--p10-shadow);
-  margin: 0 var(--p10-margin-l);
+  margin: auto;
 }
 
 nav {

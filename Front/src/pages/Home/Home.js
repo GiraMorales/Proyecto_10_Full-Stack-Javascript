@@ -64,8 +64,9 @@ const pintarEventos = (eventos, eventosApuntados, elementoPadre) => {
     const p = document.createElement('p');
     p.textContent = evento.descripcion;
 
-    const info = document.createElement('div');
-    info.innerHTML = `
+    const divinfo = document.createElement('div');
+    divinfo.classList.add('info');
+    divinfo.innerHTML = `
       <p><strong>Fecha:</strong> ${evento.fecha}</p>
       <p><strong>Ubicación:</strong> ${evento.ubicacion}</p>
     `;
@@ -97,7 +98,7 @@ const pintarEventos = (eventos, eventosApuntados, elementoPadre) => {
       divBoton.appendChild(btnAsistir);
     }
 
-    divEvento.append(h2, imagen, p, info, divBoton);
+    divEvento.append(h2, imagen, p, divinfo, divBoton);
     elementoPadre.appendChild(divEvento);
   }
 };

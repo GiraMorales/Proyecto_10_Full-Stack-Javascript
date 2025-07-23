@@ -31,6 +31,7 @@ body {
   --p10-border-radius-xl: 20px;
 
   /* FONTSIZE */
+  --p10-fontsize-xxs: 5px;
   --p10-fontsize-xs: 15px;
   --p10-fontsize-s: 25px;
   --p10-fontsize-m: 30px;
