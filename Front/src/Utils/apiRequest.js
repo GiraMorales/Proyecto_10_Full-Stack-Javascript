@@ -1,8 +1,9 @@
+const baseUrl = import.meta.env.VITE_API_URL;
+
 export const apiRequest = async (
   endpoint,
   { method = 'GET', data = null } = {}
 ) => {
-  const baseUrl = 'http://localhost:3000/api/v1';
   const token = localStorage.getItem('token');
 
   const headers = {

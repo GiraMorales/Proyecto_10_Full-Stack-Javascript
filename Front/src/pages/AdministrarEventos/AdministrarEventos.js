@@ -66,15 +66,6 @@ export const AdministrarEventos = () => {
       ubicacion: document.getElementById('ubicacion').value
     };
     try {
-      // const res = await fetch('http://localhost:3000/api/v1/eventos', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     Authorization: `Bearer ${localStorage.getItem('token')}`
-      //   },
-      //   body: JSON.stringify(evento)
-      // });
-
       await apiRequest('eventos', { method: 'POST', data: evento });
 
       if (!apiRequest.ok) throw new Error('Error al crear evento');
@@ -96,12 +87,6 @@ export const AdministrarEventos = () => {
       '<h2 class="titulo-eliminar-evento">Eliminar Eventos</h2>'; // Limpiar contenido previo
 
     try {
-      // const res = await fetch('http://localhost:3000/api/v1/eventos', {
-      //   headers: {
-      //     Authorization: `Bearer ${localStorage.getItem('token')}`
-      //   }
-      // });
-
       const eventos = await apiRequest('eventos');
       if (!Array.isArray(eventos) || eventos.length === 0) {
         contenedor.innerHTML += '<p>No hay eventos disponibles.</p>';
