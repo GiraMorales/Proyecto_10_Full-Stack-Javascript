@@ -1,2 +1,1 @@
-export const API_URL =
-  'https://proyecto-10-full-stack-javascript-b.vercel.app/';
+export const API_URL = import.meta.env.VITE_API_URL;

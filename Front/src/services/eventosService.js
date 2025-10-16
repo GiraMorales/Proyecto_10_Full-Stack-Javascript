@@ -1,7 +1,5 @@
 export const obtenerEventos = async () => {
-  const response = await fetch('http://localhost:3000/api/v1/eventos');
-  if (!response.ok) throw new Error('No se pudieron cargar los eventos');
-  return await response.json();
+  return await apiRequest('api/v1/eventos', { method: 'GET' });
 };
 
 export const obtenerEventosDelUsuario = async () => {
@@ -10,7 +8,7 @@ export const obtenerEventosDelUsuario = async () => {
   if (!user) return [];
 
   return eventos.filter((evento) =>
-    evento.relatedUsers.some(
+    evento.relatedUsers?.some(
       (userId) => userId === user._id || userId._id === user._id
     )
   );
@@ -29,21 +27,12 @@ export const toggleEventoAsistire = async (evento, userName) => {
     (user) => user._id === userName || user === userName
   );
 
-  const url = yaEstoyApuntado
-    ? `http://localhost:3000/api/v1/eventos/cancelar-asistir/${evento._id}`
-    : `http://localhost:3000/api/v1/eventos/asistir/${evento._id}`;
+  const endpoint = yaEstoyApuntado
+    ? `api/v1/eventos/cancelar-asistir/${evento._id}`
+    : `api/v1/eventos/asistir/${evento._id}`;
 
   try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    if (!response.ok) throw new Error('Error al cambiar asistencia');
-
-    const data = await response.json();
+    const data = await apiRequest(endpoint, { method: 'POST' });
 
     alert(
       yaEstoyApuntado
@@ -51,7 +40,7 @@ export const toggleEventoAsistire = async (evento, userName) => {
         : 'Te has apuntado al evento'
     );
 
-    return data.evento; // <- Devolvemos el evento actualizado
+    return data.evento; // Evento actualizado
   } catch (error) {
     console.error('Error en toggleEventoAsistire:', error);
     alert('Error al cambiar tu estado de asistencia');

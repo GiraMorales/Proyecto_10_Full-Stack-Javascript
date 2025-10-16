@@ -1,4 +1,4 @@
-const baseUrl = import.meta.env.VITE_API_URL; // https://tu-back.vercel.app/api/v1
+const baseUrl = import.meta.env.VITE_API_URL;
 
 export const apiRequest = async (
   endpoint,
