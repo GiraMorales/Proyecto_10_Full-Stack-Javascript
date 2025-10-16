@@ -16,8 +16,8 @@ Los usuarios no logueados solo ven el titulo del evento, foto y fecha del evento
 
 ## Despliegue
 
-Frontend: (https://proyecto-10-full-stack-javascript-f.vercel.app/)
-Backend: (https://proyecto-10-full-stack-javascript-b.vercel.app/)
+https://proyecto-10-full-stack-javascript.vercel.app/api/v1/eventos
+
 
 ### Backend
 - Crear archivo `.env` con las variables de entorno necesarias (ver sección Variables del entorno)
