@@ -18,13 +18,14 @@ export const apiRequest = async (
   };
 
   try {
-    const res = await fetch(`${baseUrl}/${endpoint}`, options);
+    const res = await fetch(`${baseUrl}/api/v1/${endpoint}`, options);
+
     if (!res.ok) {
       const msg = await res.text();
       throw new Error(`❌ ${res.status} - ${msg}`);
     }
 
-    if (res.status === 204) return null; // No Content
+    if (res.status === 204) return null;
     return await res.json();
   } catch (err) {
     console.error('❌ Error en apiRequest:', err);
